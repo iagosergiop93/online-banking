@@ -1,0 +1,4 @@
+{
+	"secret": "supersecret",
+	"expiration_seconds": 86400
+}
