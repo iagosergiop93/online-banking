@@ -5,6 +5,7 @@ import { AccountType } from "../entities/AccountType";
 import { Account } from "../entities/Account";
 import { ServerError } from "../exceptions/server-error";
 import { BadRequest } from "../exceptions/bad-request";
+import { createAccountUUID } from "../utils/randomNumGen";
 
 export class UserDao implements DAO<User> {
 
@@ -31,11 +32,18 @@ export class UserDao implements DAO<User> {
                     if(err) throw new ServerError("Error getting connection.");
                     let sql = "SELECT * FROM users WHERE email = ?";
                     conn.query(sql, [email], (err, results, fields) => {
-                        if(err) throw new ServerError("Failed while making the query.");
-                        // console.log(results);
-                        if(results.length == 0) throw new BadRequest("User not found.");
-                        user = this.mapResultSetToUsers(results).shift();
-                        resolve(user);
+                        try {
+                            if(err) {
+                                console.log(err);
+                                throw new ServerError("Failed while making the query.");
+                            }
+                            // console.log(results);
+                            if(results.length == 0) throw new BadRequest("User not found.");
+                            user = this.mapResultSetToUsers(results).shift();
+                            resolve(user);
+                        } catch(e) {
+                            reject(e);
+                        }
                     });
                 } catch(e) {
                     reject(e);
@@ -53,7 +61,7 @@ export class UserDao implements DAO<User> {
             this.pool.getConnection((err, conn) => {
                 try {
                     if(err) throw new ServerError("Error getting connection.");
-                    let sql = "SELECT acc.id, acc.balance, acc.type FROM user_account AS us_acc " +
+                    let sql = "SELECT acc.id, acc.accountNumber, acc.balance, acc.type FROM user_account AS us_acc " +
                                 "INNER JOIN accounts AS acc WHERE us_acc.userId = ?";
                     conn.query(sql, [userId], (err, results, fields) => {
                         if(err) throw new ServerError("Failed while making the query.");
@@ -83,6 +91,7 @@ export class UserDao implements DAO<User> {
                         conn.query(sql, [obj.firstName, obj.lastName, obj.email, obj.passwd, obj.role],
                             (err, results, fields) => {
                                 if(err) {
+                                    console.error(err);
                                     conn.rollback();
                                     if(err.code && err.code == "ER_DUP_ENTRY") reject(new BadRequest("A user with this email already exist."));
                                     else reject(new ServerError("An unexpected error happened."));
@@ -92,24 +101,27 @@ export class UserDao implements DAO<User> {
         
                                 // Create new account
                                 console.log("Creating new account " + AccountType.CHECKING);
-                                sql = "INSERT INTO accounts (balance, type) VALUES(0.0, " + AccountType.CHECKING + ")";
-                                conn.query(sql, (err2, results2, fields2) => {
+                                let accNumber = createAccountUUID();
+                                sql = "INSERT INTO accounts (accountNumber, balance, type) VALUES(?, 0.0, " + AccountType.CHECKING + ")";
+                                conn.query(sql, [accNumber], (err2, results2, fields2) => {
                                     if(err2) {
-                                        conn.rollback((e) => { throw e });
+                                        console.error(err2);
+                                        conn.rollback();
                                         reject(new ServerError("Error inserting in table user_account"));
                                         return;
                                     }
                                     
                                     // Insert into table user_account
-                                    console.log("Creating middle table entry with (userId, accountId) = (" + obj.id + ", " + results2.insertId + ")");
+                                    console.log("Creating middle table entry with (userId, accNumber) = (" + obj.id + ", " + results2.insertId + ")");
                                     sql = "INSERT INTO user_account VALUES(?, ?)"
-                                    conn.query(sql, [obj.id, results2.insertId], (err3, results3, fields3) => {
+                                    conn.query(sql, [obj.id, accNumber], (err3, results3, fields3) => {
                                         if(err3) {
-                                            conn.rollback((e) => { throw e });
+                                            console.error(err3);
+                                            conn.rollback();
                                             reject(new Error("Error inserting in table user_account"));
                                             return;
                                         }
-                                        let account = new Account(results2.insertId, 0, AccountType.CHECKING);
+                                        let account = new Account(results2.insertId, accNumber, 0, AccountType.CHECKING);
                                         obj.accounts.push(account);
                                         conn.commit();
                                         resolve(obj);
@@ -146,7 +158,7 @@ export class UserDao implements DAO<User> {
     private mapResultSetToAccounts(results: any[]) {
         let accounts = results.map(item => {
             if(item.id == undefined || item.balance == undefined || item.type == undefined) throw new ServerError("Invalid account found in Database");
-            return new Account(item.id, item.balance, item.type);
+            return new Account(item.id, item.accountNumber, item.balance, item.type);
         });
         return accounts;
     }
