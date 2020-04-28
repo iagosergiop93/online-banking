@@ -17,5 +17,15 @@ export class AccountService {
         });
     }
 
+    async getAccountsByUserId(id: number): Promise<Account[]> {
+        let accounts: Account[] = [];
+        try {
+            accounts = await this.accountDao.getAccountsByUserId(id);
+        } catch(e) {
+            throw e;
+        }
+        return accounts;
+    }
+
 
 }

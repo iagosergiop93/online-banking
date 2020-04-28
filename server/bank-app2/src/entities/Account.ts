@@ -1,4 +1,6 @@
-import { AccountType } from "./AccountType";
+export enum AccountType {
+	CHECKING = 1, SAVING = 2, JOINT = 3
+}
 
 export class Account {
 
@@ -6,6 +8,9 @@ export class Account {
 	accountNumber: string;
 	balance: number;
 	type: AccountType;
+	_createdAt: string;
+	_updatedAt: string;
+	_deletedAt: string;
 
 	constructor(id: number,accountNumber: string, balance: number, type: AccountType) {
 		this.id = id;

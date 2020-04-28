@@ -1,16 +1,19 @@
 import { Role } from "./Role";
-import { Account } from "./Account";
 
 export class Principal {
 	id: number;
 	firstName: string;
+	lastName: string;
 	email: string;
 	role: Role;
-	accounts: Account[] = [];
+	_createdAt: string;
+	_updatedAt: string;
+	_deletedAt: string;
 
-	constructor(id?: number, firstName?: string, email?: string, role?: Role) {
+	constructor(id?: number, firstName?: string, lastName?: string, email?: string, role?: Role) {
 		this.id = id;
 		this.firstName = firstName;
+		this.lastName = lastName;
 		this.email = email;
 		this.role = role
 	}
