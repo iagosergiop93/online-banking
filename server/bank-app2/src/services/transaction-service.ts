@@ -16,9 +16,13 @@ export class TransactionService {
     }
 
     processTransaction(transaction: Transaction, account: Account) {
+        console.log("Process transaction");
+        console.log(transaction.toString());
+        
         switch(transaction.type) {
             case TransactionType.DEPOSIT:
-                account.balance += transaction.value;
+                console.log("deposit");
+                account.balance = account.balance + transaction.value;
                 break;
             case TransactionType.WITHDRAW:
                 account.balance -= transaction.value;
@@ -26,6 +30,7 @@ export class TransactionService {
             case TransactionType.TRANSFER:
                 break;
         }
+        console.log(account.toString());
         return account;
     }
 
@@ -35,11 +40,13 @@ export class TransactionService {
         try {
             // Check if account belongs to user who is making the deposit
             accounts = await this.accountDao.getAccountsByUserId(principal.id);
+            console.log(accounts[0].toString());
             let account = accounts.filter(acc => {
                 return transaction.toAcc == acc.accountNumber;
             }).pop();
             if(!account) throw new BadRequest("Invalid Request");
             // Make the deposit
+            account = this.processTransaction(transaction, account);
             account = await this.transactionDao.insert(transaction, account);
         } catch(e) {
             throw e;

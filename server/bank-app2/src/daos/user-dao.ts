@@ -64,8 +64,6 @@ export class UserDao implements DAO<User> {
                                             reject(new Error("Error inserting in table user_account"));
                                             return;
                                         }
-                                        let account = new Account(results2.insertId, accNumber, 0, AccountType.CHECKING);
-                                        obj.accounts.push(account);
                                         conn.commit();
                                         resolve(obj);
                                     } )

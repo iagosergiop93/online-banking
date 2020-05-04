@@ -38,7 +38,6 @@ export class UserService {
             user.passwd = await createHash(user.passwd);
             newUser = await this.userDao.insert(user);
             newUser.passwd = "";
-            if(newUser.accounts.length == 0) throw new ServerError("Failed to create user account");
             if(!newUser.id || newUser.id == 0) throw new ServerError("Failed to create user");
         } catch(e) {
             throw e;

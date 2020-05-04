@@ -18,12 +18,12 @@ export class TransactionDao {
         throw new Error("Method not implemented.");
     }
     insert(transaction: Transaction, account: Account): Promise<Account> {
+        console.log("In insert transaction DAO: ", account.toString());
         return new Promise((resolve, reject) => {
             this.pool.getConnection((err, conn) => {
                 try {
                     if(err) throw new ServerError("It was not possible to connect to DB");
                     // Update account balance
-                    // account.balance += transaction.value;
                     let sql = "UPDATE accounts SET balance = ? WHERE accountNumber = ?";
                     conn.beginTransaction((err) => {
                         if(err) throw new ServerError("Error getting connection.");

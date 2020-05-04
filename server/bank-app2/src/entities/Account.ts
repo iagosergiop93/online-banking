@@ -12,11 +12,17 @@ export class Account {
 	_updatedAt: string;
 	_deletedAt: string;
 
-	constructor(id: number,accountNumber: string, balance: number, type: AccountType) {
+	constructor(id: number,accountNumber: string, balance: number, type: AccountType, _createdAt?: string, _updatedAt?: string) {
 		this.id = id;
 		this.accountNumber = accountNumber;
 		this.balance = balance;
 		this.type = type;
+		this._createdAt = _createdAt;
+		this._updatedAt = _updatedAt;
+	}
+
+	toString() {
+		return "id: " + this.id + " accountNumber: " + this.accountNumber + " balance: " + this.balance + " type: " + this.type;
 	}
 
 }

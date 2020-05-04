@@ -4,6 +4,7 @@ import { Principal } from "../entities/Principal";
 import { Transaction, TransactionType } from "../entities/Transaction";
 import { TransactionService } from "../services/transaction-service";
 import { validateTransaction } from "../utils/validator";
+import { ServerError } from "../exceptions/server-error";
 
 export function transactionController(transactionService: TransactionService) {
     let router = Router();
@@ -21,7 +22,8 @@ export function transactionController(transactionService: TransactionService) {
             let transaction: Transaction = new Transaction(req.body.fromAcc,req.body.toAcc, req.body.type, req.body.value);
 
             let worked = await transactionService.deposit(transaction, principal);
-
+            if(!worked) throw new ServerError("Something bad happened");
+            res.status(200).send("Transaction was successful");
         } catch(e) {
             res.status(e.status).send(e);
         }

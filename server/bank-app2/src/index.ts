@@ -23,6 +23,7 @@ import { AccountService } from "./services/account-service";
 import { TransactionService } from "./services/transaction-service";
 import { UserDao } from "./daos/user-dao";
 import { AccountDao } from "./daos/account-dao";
+import { TransactionDao } from "./daos/transaction-dao";
 
 const PORT = 4201;
 const app = express();
@@ -35,6 +36,7 @@ const container = new Container();
 container.registerDependencies([
 	UserDao,
 	AccountDao,
+	TransactionDao,
 	UserService,
 	AccountService,
 	TransactionService

@@ -19,4 +19,8 @@ export class Transaction {
         this.value = value;
     }
 
+    toString() {
+        return "id: " + this.id + ", toAcc: " + this.toAcc + ", type: " + this.type + ", value: " + this.value;
+    }
+
 }

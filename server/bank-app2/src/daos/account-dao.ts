@@ -60,7 +60,7 @@ export class AccountDao implements DAO<Account> {
     private mapResultSetToAccounts(results: any[]) {
         let accounts = results.map(item => {
             if(item.id == undefined || item.balance == undefined || item.type == undefined) throw new ServerError("Invalid account found in Database");
-            return new Account(item.id, item.accountNumber, item.balance, item.type);
+            return new Account(item.id, item.accountNumber, item.balance, item.type, item._createdAt, item._updatedAt);
         });
         return accounts;
     }
