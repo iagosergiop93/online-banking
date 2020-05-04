@@ -10,5 +10,13 @@ export class Transaction {
     type: TransactionType;
     value: number;
     _createdAt: string;
-	_updatedAt: string;
+    _updatedAt: string;
+    
+    constructor(from: string, to: string, type: TransactionType, value: number) {
+        this.fromAcc = from;
+        this.toAcc = to;
+        this.type = type;
+        this.value = value;
+    }
+
 }

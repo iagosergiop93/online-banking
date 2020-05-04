@@ -1,5 +1,6 @@
 import { Request } from "express";
 import { BadRequest } from "../exceptions/bad-request";
+import { TransactionType } from "../entities/Transaction";
 
 export function validateEmail(email: string) {
     let expr = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
@@ -23,4 +24,8 @@ export function validateUserRegistration(req: Request) {
 export function validateCredentials(req: Request) {
     if(!validateEmail(req.body.email)) throw new BadRequest("Invalid credentials");
     if(!validateSize(req.body.passwd, 4)) throw new BadRequest("Invalid credentials");
+}
+
+export function validateTransaction(req: Request) {
+    if(!req.body.fromAcc || !req.body.toAcc || !req.body.type || !req.body.value) throw new BadRequest("Missing field");
 }
