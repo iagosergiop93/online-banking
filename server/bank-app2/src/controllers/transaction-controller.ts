@@ -9,11 +9,11 @@ import { ServerError } from "../exceptions/server-error";
 export function transactionController(transactionService: TransactionService) {
     let router = Router();
 
-    router.post("/deposit", async (req: Request, res: Response) => {
+    router.post("/simple", async (req: Request, res: Response) => {
         try {
             // Validate Transaction
             validateTransaction(req);
-            if(req.body.type != TransactionType.DEPOSIT || req.body.fromAcc != req.body.toAcc) throw new BadRequest("Invalid Request");
+            if((req.body.type != TransactionType.DEPOSIT && req.body.type != TransactionType.WITHDRAW) || req.body.fromAcc != req.body.toAcc) throw new BadRequest("Invalid Request");
             // Check if user is authorized
             // Get principal
             if(!res.locals.authorization) throw new BadRequest("Missing fields");
@@ -21,7 +21,7 @@ export function transactionController(transactionService: TransactionService) {
             if(!principal.id || principal.id == 0) throw new BadRequest("Missing fields");
             let transaction: Transaction = new Transaction(req.body.fromAcc,req.body.toAcc, req.body.type, req.body.value);
 
-            let worked = await transactionService.deposit(transaction, principal);
+            let worked = await transactionService.simpleTransaction(transaction, principal);
             if(!worked) throw new ServerError("Something bad happened");
             res.status(200).send("Transaction was successful");
         } catch(e) {
@@ -29,21 +29,24 @@ export function transactionController(transactionService: TransactionService) {
         }
     });
 
-    router.post("/transfer", (req: Request, res: Response) => {
-        // Check if user is authorized
-        // Get principal
-        if(!res.locals.authorization) throw new BadRequest("Missing fields");
-        let principal: Principal = JSON.parse(res.locals.authorization.data);
-        if(!principal.id || principal.id == 0) throw new BadRequest("Missing fields");
-        // Check if the account that will have money transfered from belongs to this user
-    });
-
-    router.post("/withdraw", (req: Request, res: Response) => {
-        // Check if user is authorized
-        // Get principal
-        if(!res.locals.authorization) throw new BadRequest("Missing fields");
-        let principal: Principal = JSON.parse(res.locals.authorization.data);
-        if(!principal.id || principal.id == 0) throw new BadRequest("Missing fields");
+    router.post("/transfer", async (req: Request, res: Response) => {
+        try {
+            // Validate Transaction
+            validateTransaction(req);
+            if(req.body.type != TransactionType.TRANSFER || req.body.fromAcc == req.body.toAcc) throw new BadRequest("Invalid Request");
+            // Check if user is authorized
+            // Get principal
+            if(!res.locals.authorization) throw new BadRequest("Missing fields");
+            let principal: Principal = JSON.parse(res.locals.authorization.data);
+            if(!principal.id || principal.id == 0) throw new BadRequest("Missing fields");
+            let transaction: Transaction = new Transaction(req.body.fromAcc,req.body.toAcc, req.body.type, req.body.value);
+            
+            let worked = await transactionService.transfer(transaction, principal);
+            if(!worked) throw new ServerError("Something bad happened");
+            res.status(200).send("Transaction was successful");
+        } catch(e) {
+            res.status(e.status).send(e);
+        }
     });
 
     return router;

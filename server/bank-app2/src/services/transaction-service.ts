@@ -27,14 +27,14 @@ export class TransactionService {
             case TransactionType.WITHDRAW:
                 account.balance -= transaction.value;
                 break;
-            case TransactionType.TRANSFER:
-                break;
+            default:
+                throw new BadRequest("Invalid request.");
         }
         console.log(account.toString());
         return account;
     }
 
-    async deposit(transaction: Transaction, principal: Principal): Promise<boolean> {
+    async simpleTransaction(transaction: Transaction, principal: Principal): Promise<boolean> {
         let accounts: Account[] = null;
 
         try {
@@ -55,12 +55,10 @@ export class TransactionService {
         return true;
     }
 
-    async withdraw(transaction: Transaction, principal: Principal) {
-
-    }
-
-    async transfer(transaction: Transaction, principal: Principal) {
+    async transfer(transaction: Transaction, principal: Principal): Promise<boolean> {
         
+        
+        return true;
     }
 
 }
