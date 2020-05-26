@@ -1,0 +1,108 @@
+@import '../../../styles.scss';
+
+.cover {
+    background-image: url(../../../assets/pic13.jpg) !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+    background-attachment: fixed !important;
+    background-size: cover !important;
+    margin: 0 !important;
+    height: 400px !important;
+
+    .cover-section {
+        padding: 3rem;
+
+        span {
+            display: block;
+            width: 100%;
+            padding: 0.5rem 0;
+        }
+
+        .mr-v-1 {
+            margin: 2rem 0;
+        }
+
+        .mr-v-2 {
+            margin: 1rem 0;
+        }
+
+        .w-60 {
+            width: 60%;
+        }
+
+    }
+
+}
+
+.box {
+    background: #ffffff;
+    height: 340px;
+    width: 100vw;
+    position: relative;
+    margin: 3rem 0;
+
+    .img-box {
+        width: 100%;
+        display: inline-block;
+        position: relative;
+        img {
+            display: block;
+            max-width: 100%;
+        }
+    }
+
+    .section-title {
+        display: block;
+        padding: 0.25rem 0rem;
+        border-bottom: 2px solid $grey;
+        width: 100%;
+        font-size: 1.25rem;
+        color: #000;
+    }
+    
+    .checking-section {
+        background: $dark;
+        padding: 3rem;
+    }
+    
+    .savings-section {
+        background: $dark;
+        padding: 3rem;
+    }
+    
+    #checking {
+        span {
+            display: block;
+            width: 100%;
+            padding: 0.5rem 0;
+        }
+    }
+    
+    #savings {
+        span {
+            display: block;
+            width: 100%;
+            padding: 0.5rem 0;
+        }
+    }
+}
+
+.box2 {
+    background: $grey;
+    height: 300px;
+    width: 100vw;
+    position: relative;
+
+    .content-sec {
+        position: relative;
+        padding: 3rem;
+        display: block;
+
+        span {
+            display: block;
+            width: 100%;
+            padding: 0.5rem 0;
+        }
+    }
+
+}

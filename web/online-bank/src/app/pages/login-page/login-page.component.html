@@ -1,0 +1,20 @@
+<div class="login-container">
+
+	<span class="login-title">Login</span>
+
+	<mat-form-field appearance="legacy">
+		<input matInput [formControl]="emailFormControl" placeholder="Email" type="email">
+		<mat-error *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')">Invalid email</mat-error>
+	</mat-form-field>
+	
+	<mat-form-field appearance="legacy">
+		<input matInput [formControl]="pwFormControl" placeholder="Password" type="password">
+		<mat-error *ngIf="emailFormControl.hasError('required')">Invalid Password</mat-error>
+	</mat-form-field>
+	
+
+	<br>
+
+	<button mat-button (click)="submitLogin()">Login</button>
+
+</div>

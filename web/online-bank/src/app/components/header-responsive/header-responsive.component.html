@@ -1,0 +1,18 @@
+<mat-toolbar color="primary">
+	<div class="header-content">
+		<div class="toggle-title">
+			<button mat-button (click)="toggleSidebar()" class="toggle-btn">
+				<mat-icon class="example-icon" aria-hidden="false" aria-label="Example heart icon">menu</mat-icon>
+			</button>
+			<span class="title">{{ title }}</span>
+		</div>
+		<div class="items-box">
+			<span *ngFor="let item of items" class="items2">{{ item.name }}</span>
+		</div>
+		<div *ngIf="toggle" class="toggle-items">
+			<mat-toolbar-row *ngFor="let item of items">
+				<button mat-button class="items">{{ item.name }}</button>
+			</mat-toolbar-row>
+		</div>
+	</div>
+</mat-toolbar>
