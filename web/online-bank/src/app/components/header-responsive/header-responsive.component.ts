@@ -11,10 +11,10 @@ export class HeaderResponsiveComponent implements OnInit {
   toggle = false;
 
   items = [
-    { name: 'About', link: '' },
     { name: 'Checking', link: '' },
     { name: 'Savings', link: '' },
     { name: 'Investments', link: '' },
+    { name: 'Sign up', link: '' }
   ];
 
   toggleSidebar() {

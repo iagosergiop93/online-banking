@@ -21,6 +21,7 @@ import { DashboardPageComponent } from './pages/dashboard-page/dashboard-page.co
 // Components
 import { HeaderResponsiveComponent } from "./components/header-responsive/header-responsive.component";
 import { SimpleLineChartComponent } from "./components/charts/simple-line-chart/simple-line-chart.component";
+import { FooterResponsiveComponent } from './components/footer-responsive/footer-responsive.component';
 
 
 @NgModule({
@@ -30,7 +31,8 @@ import { SimpleLineChartComponent } from "./components/charts/simple-line-chart/
     LoginPageComponent,
     DashboardPageComponent,
     HeaderResponsiveComponent,
-    SimpleLineChartComponent
+    SimpleLineChartComponent,
+    FooterResponsiveComponent
   ],
   imports: [
     MatInputModule,

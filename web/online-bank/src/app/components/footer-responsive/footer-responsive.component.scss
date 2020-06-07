@@ -1,0 +1,31 @@
+@import '../../../styles.scss';
+
+footer {
+    display: block;
+    width: 100%;
+    padding: 2rem 0;
+    background-color: $dark;
+    color: #fff;
+    
+    .footer-box {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-evenly;
+    }
+
+    .footer-box-col {
+        align-self: center;
+        display: block;
+        span {
+            text-align: center;
+            display: block;
+            margin-top: 0.5rem;
+        }
+    }
+
+    .title-footer {
+        font-size: 1.25rem;
+        display: inline-block;
+    }
+}
+
