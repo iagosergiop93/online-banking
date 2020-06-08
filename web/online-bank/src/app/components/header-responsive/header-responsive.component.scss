@@ -9,6 +9,7 @@ mat-toolbar {
 }
 
 .header-content {
+	position: relative;
 	padding: 0 5rem;
 	width: 100%;
 	max-width: $content-width;
@@ -28,6 +29,7 @@ mat-toolbar {
 	}
 
 	.items-box {
+		display: inline-block;
 		display: inline-block;
 		width: 50%;
 		text-align: right;
@@ -64,36 +66,28 @@ mat-toolbar {
 }
 
 @media(max-width: 700px) {
-	.items-box {
-		display: none;
-	}
+	.header-content {
+		padding: 0;
 
-	.toggle-items {
-		display: flex;
-		flex-direction: column;
+		.toggle-title {
+			
+			.toggle-btn {
+				display: inline-block;
+			}
 
-		.items {
-			width: 100%;
+			.title {
+				position: absolute;
+				left: calc(50% - 55px);
+			}
 		}
-	}
 
-	.head-spacer {
-		display: none;
-	}
-
-	.toggle-title {
-		left: 0;
-		position: relative;
-		padding: 1rem 0;
-
-		.toggle-btn {
-			display: inline-block;
-			width: 5rem;
+		.items-box {
+			display: none;
 		}
-	
-		.title {
-			display: inline-block;
-			width: 50%;
+
+		.toggle-items mat-toolbar-row:hover {
+			background-color: $primary;
+			cursor: pointer;
 		}
 	}
 }
