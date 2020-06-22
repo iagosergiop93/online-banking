@@ -1,1 +1,18 @@
-<p>dashboard-page works!</p>
+<mat-sidenav-container>
+    <mat-sidenav #sidenav>
+        <p><button mat-button (click)="sidenav.toggle()">Toggle</button></p>
+        
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+        <!-- Summary Section -->
+        <app-summary></app-summary>
+        
+        <!-- Balance Section -->
+        <app-balance></app-balance>
+        
+        <!-- Transaction History Section -->
+        <app-transaction-history></app-transaction-history>
+
+    </mat-sidenav-content>
+</mat-sidenav-container>

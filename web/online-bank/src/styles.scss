@@ -78,6 +78,12 @@ $grey: #ebebeb;
     position: relative;
 }
 
+@media (max-width: 800px) {
+    .page-content {
+        padding: 0px;
+    }
+}
+
 .content {
     position: relative;
     display: flex;

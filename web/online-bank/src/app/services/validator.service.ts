@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Credentials } from '../entities/credentials';
 
 @Injectable({
   providedIn: 'root'
@@ -19,5 +20,10 @@ export class ValidatorService {
       return true;
     }
     return false;
+  }
+
+  credentials(cred: Credentials): boolean {
+    if(!cred.email || !cred.passwd) return false;
+    return this.email(cred.email) && this.password(cred.passwd);
   }
 }

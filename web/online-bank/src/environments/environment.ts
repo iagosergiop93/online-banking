@@ -3,7 +3,14 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+};
+
+export const API_URL = "http://localhost:4201";
+export const TOKEN = {
+  name: "b-token",
+  scheme: "Bearer",
+  userInfo: "user-info"
 };
 
 /*

@@ -18,6 +18,10 @@
             padding: 0.5rem 0;
         }
 
+        span.mobile {
+            display: none;
+        }
+
         .mr-v-1 {
             margin: 2rem 0;
         }
@@ -105,4 +109,26 @@
         }
     }
 
+}
+
+
+@media (max-width: 800px) {
+    .cover {
+        .cover-section {
+            padding: 1rem;
+
+            span.web {
+                display: none;
+            }
+
+            span.mobile {
+                display: block;
+            }
+
+            span.font-4 {
+                margin: 1rem 0;
+            }
+        }
+    }
+    
 }

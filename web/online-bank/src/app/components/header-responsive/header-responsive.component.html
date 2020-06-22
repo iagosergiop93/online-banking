@@ -1,5 +1,5 @@
 <mat-toolbar color="primary">
-	<div class="header-content">
+	<div class="header-content" [ngClass]="{'add-padding': toggle}">
 		<div class="toggle-title">
 			<button mat-button (click)="toggleSidebar()" class="toggle-btn">
 				<mat-icon class="example-icon" aria-hidden="false" aria-label="Menu button">menu</mat-icon>

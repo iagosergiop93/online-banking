@@ -1,26 +1,31 @@
+@import '../../../styles.scss';
+
 /* Login and Register */
 .login-container {
 	display: flex;
 	flex-direction: column;
 	
 	margin: 0 auto;
-	margin-top: 10rem;
-	padding: 2rem 1rem;
+	margin-top: 5rem;
+	padding: 2rem 0rem;
 
 	width: 25rem;
 	max-width: 95%;
 
 	border-radius: 7px;
-	border: 1px solid #b2b2b2;
+	border: 2px solid rgba(200,200,200,0.5);
 
 	.login-title {
-		display: inline-block;
+		display: block;
+		margin: 0 auto;
 		padding: 1rem;
 		font-size: 2rem;
 	}
 
 	mat-form-field {
-		padding: 0 1rem;
+		padding: 0 2rem;
+		width: 80%;
+		margin: 0 auto;
 		margin-bottom: 1rem;
 	}
 
@@ -28,7 +33,7 @@
 		width: 50%;
 		margin: 0 auto;
 		color: #ffffff;
-		background: orange;
+		background: $primary;
 	}
 
 }

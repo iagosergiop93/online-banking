@@ -17,11 +17,16 @@ import { LandingPageComponent } from './pages/landing-page/landing-page.componen
 import { LoginPageComponent } from './pages/login-page/login-page.component';
 import { DashboardPageComponent } from './pages/dashboard-page/dashboard-page.component';
 
+// Interceptors
+import { httpInterceptorProviders } from './interceptors/index';
 
 // Components
 import { HeaderResponsiveComponent } from "./components/header-responsive/header-responsive.component";
 import { SimpleLineChartComponent } from "./components/charts/simple-line-chart/simple-line-chart.component";
 import { FooterResponsiveComponent } from './components/footer-responsive/footer-responsive.component';
+import { SummaryComponent } from './pages/dashboard-page/summary/summary.component';
+import { BalanceComponent } from './pages/dashboard-page/balance/balance.component';
+import { TransactionHistoryComponent } from './pages/dashboard-page/transaction-history/transaction-history.component';
 
 
 @NgModule({
@@ -32,7 +37,10 @@ import { FooterResponsiveComponent } from './components/footer-responsive/footer
     DashboardPageComponent,
     HeaderResponsiveComponent,
     SimpleLineChartComponent,
-    FooterResponsiveComponent
+    FooterResponsiveComponent,
+    SummaryComponent,
+    BalanceComponent,
+    TransactionHistoryComponent
   ],
   imports: [
     MatInputModule,
@@ -47,7 +55,9 @@ import { FooterResponsiveComponent } from './components/footer-responsive/footer
     AppRoutingModule,
     BrowserAnimationsModule
   ],
-  providers: [],
+  providers: [
+    httpInterceptorProviders
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

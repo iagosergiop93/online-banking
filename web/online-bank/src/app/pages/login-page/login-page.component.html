@@ -1,4 +1,6 @@
-<div class="login-container">
+<app-header-responsive></app-header-responsive>
+
+<div class="login-container page-content">
 
 	<span class="login-title">Login</span>
 
@@ -11,7 +13,6 @@
 		<input matInput [formControl]="pwFormControl" placeholder="Password" type="password">
 		<mat-error *ngIf="emailFormControl.hasError('required')">Invalid Password</mat-error>
 	</mat-form-field>
-	
 
 	<br>
 

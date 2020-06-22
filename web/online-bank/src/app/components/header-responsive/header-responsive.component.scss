@@ -3,6 +3,10 @@
 mat-toolbar {
 	overflow: hidden;
 	color: #ffffff;
+	position: sticky;
+	top: -1px;
+	z-index: 100;
+
 	* {
 		z-index: 10;
 	}
@@ -65,7 +69,13 @@ mat-toolbar {
 	}
 }
 
-@media(max-width: 700px) {
+@media(max-width: 800px) {
+
+	mat-toolbar {
+		padding: 0px;;
+	}
+
+
 	.header-content {
 		padding: 0;
 
@@ -89,5 +99,9 @@ mat-toolbar {
 			background-color: $primary;
 			cursor: pointer;
 		}
+	}
+
+	.header-content.add-padding {
+		padding-top: 10px;
 	}
 }
