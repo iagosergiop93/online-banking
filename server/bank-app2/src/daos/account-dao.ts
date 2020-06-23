@@ -21,7 +21,23 @@ export class AccountDao implements DAO<Account> {
     }
 
     insert(obj: Account): Promise<Account> {
-        throw new Error("Method not implemented.");
+        return new Promise((resolve, reject) => {
+            this.pool.getConnection((err, conn) => {
+                try {
+                    if(err) throw new ServerError("Error getting connection.");
+                    let sql = "INSERT INTO accounts (accountNumber, balance, type) VALUES(?, 0.0, ?)";
+                    conn.query(sql, [obj.accountNumber, obj.type], (err, results, fields) => {
+                        if(err) throw new ServerError("Failed while making the query.");
+                        obj.id = results.insertId;
+                        resolve(obj);
+                    });
+                } catch(e) {
+                    reject(e);
+                } finally {
+                    conn.release();
+                }
+            });
+        });
     }
 
     update(obj: Account): Promise<Account> {

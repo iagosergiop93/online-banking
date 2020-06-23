@@ -1,7 +1,8 @@
 import { User } from "../entities/User";
-import { Account } from "../entities/Account";
+import { Account, AccountType } from "../entities/Account";
 import { Role } from "../entities/Role";
 import { AccountDao } from "../daos/account-dao";
+import { createAccountUUID } from "../utils/randomNumGen";
 
 export class AccountService {
 
@@ -11,10 +12,15 @@ export class AccountService {
         this.accountDao = accountDao;
     }
 
-    createAccount(userId: number, type?: Role): Promise<Account> {
-        return new Promise((resolve, reject) => {
-            resolve(null)
-        });
+    async createAccount(userId: number, type: AccountType): Promise<Account> {
+        let accNumber = createAccountUUID();
+        let account = new Account(0, accNumber, 0.0, type);
+        try {
+            account = await this.accountDao.insert(account);
+        } catch(e) {
+            throw e;
+        }
+        return account;
     }
 
     async getAccountsByUserId(id: number): Promise<Account[]> {

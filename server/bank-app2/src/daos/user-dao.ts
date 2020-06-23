@@ -50,7 +50,7 @@ export class UserDao implements DAO<User> {
                                     if(err2) {
                                         console.error(err2);
                                         conn.rollback();
-                                        reject(new ServerError("Error inserting in table user_account"));
+                                        reject(new ServerError("Error inserting in table accounts"));
                                         return;
                                     }
                                     
