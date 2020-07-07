@@ -1,5 +1,10 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+
+// Guards
+import { AuthGuard } from './guards/auth.guard';
+
+// Components
 import { LandingPageComponent } from './pages/landing-page/landing-page.component';
 import { LoginPageComponent } from './pages/login-page/login-page.component';
 import { DashboardPageComponent } from './pages/dashboard-page/dashboard-page.component';
@@ -8,7 +13,7 @@ import { DashboardPageComponent } from './pages/dashboard-page/dashboard-page.co
 const routes: Routes = [
   { path: "", component: LandingPageComponent },
   { path: "login", component: LoginPageComponent },
-  { path: "home", component: DashboardPageComponent },
+  { path: "home", component: DashboardPageComponent, canActivate: [AuthGuard], canActivateChild: [AuthGuard] },
 
 ];
 

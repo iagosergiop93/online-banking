@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
+import { FormControl, Validators, FormGroup } from '@angular/forms';
+import { UsersService } from 'src/app/services/users.service';
+import { Credentials } from 'src/app/entities/credentials';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login-page',
@@ -8,27 +11,51 @@ import { FormControl, Validators } from '@angular/forms';
 })
 export class LoginPageComponent implements OnInit {
 
-  emailFormControl = new FormControl('', [
-    Validators.required,
-    Validators.email,
-  ]);
+	loginForm: FormGroup;
+	userService: UsersService;
+	router: Router;
 
-  pwFormControl = new FormControl('', [
-    Validators.required,
-    Validators.minLength(5)
-  ]);
+	get f() {
+		return this.loginForm.controls;
+	}
 
-  constructor() { }
+	constructor(userService: UsersService, router: Router) {
+		this.userService = userService;
+		this.router = router;
+	}
 
-  ngOnInit() {
-  }
+	ngOnInit() {
+		this.loginForm = new FormGroup({
+			email: new FormControl('', [
+				Validators.required,
+				Validators.email,
+			]),
+			passwd: new FormControl('', [
+				Validators.required,
+				Validators.minLength(4)
+			])
+		});
+	}
 
-  submitLogin() {
+	submitForm() {
+		const result = Object.assign({}, this.loginForm.value);
+		let cred = new Credentials(result.email, result.passwd);
+		
+		// Make the request
+		this.userService.login(cred).subscribe(
+			(res) => {
+				this.userLoggedInCallback();
+			},
+			(err) => {
+				console.log(err);
+			}
+		);
 
-    // Validation
+		this.loginForm.reset();
+	}
 
-    // Send to server
-
-  }
+	userLoggedInCallback() {
+		this.router.navigate(['/home']);
+	}
 
 }

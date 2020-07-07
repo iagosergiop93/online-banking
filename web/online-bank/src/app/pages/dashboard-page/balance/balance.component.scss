@@ -1,0 +1,30 @@
+@import "../../../../styles.scss";
+
+.flex-balance {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 1rem;
+}
+
+.account {
+    border-radius: 12px;
+    border: 3px solid $grey;
+    padding: 1rem;
+    margin: 2rem;
+    width: 7rem;
+    height: 5rem;
+    line-height: 1.5;
+
+    .value {
+        margin-bottom: 0.5rem;
+        display: block;
+        text-align: center;
+    }
+
+    .acc-type {
+        display: block;
+        text-align: center;
+    }
+
+}

@@ -1,10 +1,13 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
+import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
+// Guards
+import { AuthGuard } from './guards/auth.guard';
 
 // Material
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -49,6 +52,7 @@ import { TransactionHistoryComponent } from './pages/dashboard-page/transaction-
     MatSidenavModule,
     MatIconModule,
     MatToolbarModule,
+    HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
     BrowserModule,
@@ -56,7 +60,8 @@ import { TransactionHistoryComponent } from './pages/dashboard-page/transaction-
     BrowserAnimationsModule
   ],
   providers: [
-    httpInterceptorProviders
+    httpInterceptorProviders,
+    AuthGuard
   ],
   bootstrap: [AppComponent]
 })

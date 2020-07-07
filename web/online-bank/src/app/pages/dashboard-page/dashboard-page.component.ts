@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { SummaryComponent } from './summary/summary.component';
+import { BalanceComponent } from './balance/balance.component';
+import { TransactionHistoryComponent } from './transaction-history/transaction-history.component';
 
 @Component({
   selector: 'app-dashboard-page',
@@ -7,9 +10,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DashboardPageComponent implements OnInit {
 
-  constructor() { }
+	@ViewChild('summary') summary: SummaryComponent;
+	@ViewChild('balances') balances: BalanceComponent;
+	@ViewChild('transactions') transactions: TransactionHistoryComponent;
 
-  ngOnInit(): void {
-  }
+	constructor() { }
+
+	ngOnInit(): void {
+
+	}
 
 }

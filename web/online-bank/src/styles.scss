@@ -105,3 +105,10 @@ $grey: #ebebeb;
     }
 }
 
+.section-title {
+    display: block;
+    padding: 1rem;
+    padding-bottom: 5px;
+    width: 100%;
+    border-bottom: 2px solid $primary;
+}
