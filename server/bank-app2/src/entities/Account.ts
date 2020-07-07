@@ -1,5 +1,5 @@
 export enum AccountType {
-	CHECKING = 1, SAVING = 2, JOINT = 3
+	CHECKING = 1, SAVINGS = 2, JOINT = 3
 }
 
 export class Account {

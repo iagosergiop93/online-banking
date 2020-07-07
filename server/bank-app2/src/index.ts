@@ -29,7 +29,14 @@ const PORT = 4201;
 const app = express();
 app.use(bodyParser.json());
 app.use(helmet());
-app.use(cors());
+
+const corsConfig = {
+	origin: ["http://localhost:4200", "http://localhost:4201"],
+	allowedHeaders: ['Content-Type', 'Content-Length'],
+	exposedHeaders: ['Authorization']
+}
+
+app.use(cors(corsConfig));
 
 // Factory
 const container = new Container();

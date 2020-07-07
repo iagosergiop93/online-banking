@@ -20,7 +20,7 @@ export class Container {
         if(!fun) throw new Error("An empty function was passed");
         let funName = fun.name.toLowerCase();
         console.log("Getting dependencies of: " + funName);
-        if(this.dependencies[funName] != undefined) return this.dependencies[funName];
+        if(!!this.dependencies[funName]) return this.dependencies[funName];
 
         let args = this.getFunArgs(fun);
         console.log("Arguments: " + args + "  " + args.length);
@@ -28,7 +28,7 @@ export class Container {
         if(args.length > 0) {
             var deps = [];
             for(let i=0; i < args.length;i++) {
-                if(this.dependencies[args[i]] != undefined) {
+                if(!!this.dependencies[args[i]]) {
                     deps.push(this.dependencies[args[i]]);
                 }
                 else {
@@ -49,7 +49,7 @@ export class Container {
         let str = fun.toString();
         return str.substring(str.indexOf('(')+1, str.indexOf(')')).split(',')
                 .map(item => {
-                    let idx = item.indexOf(':'); // in case the type is in the dependencie
+                    let idx = item.indexOf(':'); // in case the type is in the dependency
                     if( idx != -1) return item.substring(0, idx).trim().toLowerCase();
                     else return item.trim().toLowerCase();
                 });

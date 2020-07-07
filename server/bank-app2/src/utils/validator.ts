@@ -1,6 +1,7 @@
-import { Request } from "express";
+import { Request, Response, NextFunction } from "express";
 import { BadRequest } from "../exceptions/bad-request";
 import { TransactionType } from "../entities/Transaction";
+import { Principal } from "../entities/Principal";
 
 export function validateEmail(email: string) {
     let expr = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
@@ -28,4 +29,16 @@ export function validateCredentials(req: Request) {
 
 export function validateTransaction(req: Request) {
     if(!req.body.fromAcc || !req.body.toAcc || !req.body.type || !req.body.value) throw new BadRequest("Missing field");
+}
+
+export function checkForToken(req: Request, res: Response, next: NextFunction) {
+    // Check if user is authorized
+    try {
+        if(!res.locals.authorization) throw new BadRequest("Missing fields");
+        let principal: Principal = JSON.parse(res.locals.authorization.data);
+        if(!principal.id || principal.id == 0) throw new BadRequest("Missing fields");
+        next();
+    } catch(e) {
+        res.status(e.status).send(e);
+    }
 }

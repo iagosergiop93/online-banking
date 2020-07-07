@@ -55,11 +55,14 @@ export class AccountDao implements DAO<Account> {
             this.pool.getConnection((err, conn) => {
                 try {
                     if(err) throw new ServerError("Error getting connection.");
-                    let sql = "SELECT acc.id, acc.accountNumber, acc.balance, acc.type FROM user_account AS us_acc " +
-                                "INNER JOIN accounts AS acc WHERE us_acc.userId = ?";
+                    let sql = "SELECT acc.id, acc.accountNumber, acc.balance, acc.type " +
+                                "FROM user_account AS us_acc " +
+                                "INNER JOIN accounts AS acc " +
+                                "ON us_acc.accNumber = acc.accountNumber " +
+                                "WHERE us_acc.userId = ?";
                     conn.query(sql, [userId], (err, results, fields) => {
                         if(err) throw new ServerError("Failed while making the query.");
-                        // console.log(results);
+                        //console.log(results);
                         if(results.length == 0) throw new BadRequest("User accounts not found.");
                         accounts = this.mapResultSetToAccounts(results);
                         resolve(accounts);
