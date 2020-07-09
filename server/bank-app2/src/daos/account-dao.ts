@@ -4,7 +4,7 @@ import { Pool } from "mysql";
 import { ServerError } from "../exceptions/server-error";
 import { BadRequest } from "../exceptions/bad-request";
 
-export class AccountDao implements DAO<Account> {
+export class AccountDao implements DAO {
 
     pool: Pool;
 

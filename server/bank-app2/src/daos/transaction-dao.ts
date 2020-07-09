@@ -2,8 +2,9 @@ import { Transaction } from "../entities/Transaction";
 import { Pool } from "mysql";
 import { ServerError } from "../exceptions/server-error";
 import { Account } from "../entities/Account";
+import { DAO } from "./DAO-interface";
 
-export class TransactionDao {
+export class TransactionDao implements DAO{
 
     pool: Pool;
 

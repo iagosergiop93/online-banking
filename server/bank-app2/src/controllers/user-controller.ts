@@ -7,13 +7,16 @@ import { Role } from "../entities/Role";
 import { Principal } from "../entities/Principal";
 import { createJwt } from "../utils/jwt-util";
 import { ServerError } from "../exceptions/server-error";
+import { Container } from "../container/container";
 
-export function userController(userService: UserService): Router {
+export function userController(container: Container): Router {
     
+    let userService: UserService = container.getSingleton(UserService);
     let router = Router();
 
     router.post("/register", async (req: Request, res: Response) => {
         console.log("In /register handler")
+        console.log(userService);
         try {
             // validate input (throws BadRequest if something is wrong)
             validateUserRegistration(req);

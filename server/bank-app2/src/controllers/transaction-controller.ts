@@ -5,8 +5,11 @@ import { Transaction, TransactionType } from "../entities/Transaction";
 import { TransactionService } from "../services/transaction-service";
 import { validateTransaction } from "../utils/validator";
 import { ServerError } from "../exceptions/server-error";
+import { Container } from "../container/container";
 
-export function transactionController(transactionService: TransactionService) {
+export function transactionController(container: Container) {
+
+    let transactionService = container.getSingleton(TransactionService)
     let router = Router();
 
     router.post("/simple", async (req: Request, res: Response) => {

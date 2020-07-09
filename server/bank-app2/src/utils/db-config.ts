@@ -8,7 +8,7 @@ export function getPool(numOfConn?: number): Pool {
         return SINGLE_POOL;
     }
 
-    let conf = getPoolConfig();
+    let conf = getPoolConfig(numOfConn);
     createPool(conf);
     
     return SINGLE_POOL;
@@ -20,7 +20,7 @@ function poolExists() {
 
 function getPoolConfig(numOfConn?: number): any {
     let conf = Object.create(config);
-    if(numOfConn && numOfConn > 0 && numOfConn < 100) {
+    if(!!numOfConn && numOfConn > 0 && numOfConn < 100) {
         conf.connectionLimit = numOfConn;
     }
     return conf;
