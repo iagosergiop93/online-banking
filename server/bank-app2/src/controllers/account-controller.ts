@@ -3,11 +3,10 @@ import { AccountService } from "../services/account-service";
 import { BadRequest } from "../exceptions/bad-request";
 import { Principal } from "../entities/Principal";
 import { checkForToken } from "../utils/validator";
-import { Container } from "../container/container";
 
-export function accountController(container: Container) {
+export function accountController() {
 
-    let accountService: AccountService = container.getSingleton(AccountService);
+    let accountService: AccountService = AccountService.prototype.Factory();
     let router = Router();
 
     router.use(checkForToken);

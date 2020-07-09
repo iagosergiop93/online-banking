@@ -4,8 +4,9 @@ import { AccountDao } from "../daos/account-dao";
 import { TransactionDao } from "../daos/transaction-dao";
 import { Account } from "../entities/Account";
 import { BadRequest } from "../exceptions/bad-request";
+import { Factory } from "../interfaces/Factory";
 
-export class TransactionService {
+export class TransactionService implements Factory{
 
     accountDao: AccountDao;
     transactionDao: TransactionDao;
@@ -59,6 +60,13 @@ export class TransactionService {
         
         
         return true;
+    }
+
+    Factory(): TransactionService {
+        const accountDao: AccountDao = AccountDao.prototype.Factory();
+        const transactionDao: TransactionDao = TransactionDao.prototype.Factory();
+
+        return new TransactionService(accountDao, transactionDao);
     }
 
 }

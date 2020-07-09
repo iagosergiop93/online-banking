@@ -5,14 +5,14 @@ import { Account, AccountType } from "../entities/Account";
 import { ServerError } from "../exceptions/server-error";
 import { BadRequest } from "../exceptions/bad-request";
 import { createAccountUUID } from "../utils/randomNumGen";
+import { getPool } from "../utils/db-config";
+import { Factory } from "../interfaces/Factory";
 
-export class UserDao implements DAO {
+export class UserDao implements DAO, Factory {
 
-    pool: Pool;
+    pool: Pool = getPool();
 
-    constructor(pool: Pool) {
-        this.pool = pool;
-    }
+    constructor() {}
 
     getAll(): Promise<User[]> {
         throw new Error("Method not implemented.");
@@ -125,6 +125,10 @@ export class UserDao implements DAO {
             return new User(item.id, item.firstName, item.lastName, item.email, item.passwd, item.role);
         });
         return users;
+    }
+
+    Factory() {
+        return new UserDao();
     }
 
 }

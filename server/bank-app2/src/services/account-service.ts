@@ -3,8 +3,9 @@ import { Account, AccountType } from "../entities/Account";
 import { Role } from "../entities/Role";
 import { AccountDao } from "../daos/account-dao";
 import { createAccountUUID } from "../utils/randomNumGen";
+import { Factory } from "../interfaces/Factory";
 
-export class AccountService {
+export class AccountService implements Factory{
 
     private accountDao: AccountDao;
 
@@ -33,5 +34,9 @@ export class AccountService {
         return accounts;
     }
 
+    Factory(): AccountService {
+        const accountDao = AccountDao.prototype.Factory();
+        return new AccountService(accountDao);
+    }
 
 }

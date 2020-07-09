@@ -3,9 +3,10 @@ import { UserDao } from "../daos/user-dao";
 import { createHash, comparePassWithHash } from "../utils/secure";
 import { BadRequest } from "../exceptions/bad-request";
 import { ServerError } from "../exceptions/server-error";
+import { Factory } from "../interfaces/Factory";
 
-export class UserService {
-
+export class UserService implements Factory {
+    
     private userDao: UserDao;
 
     constructor(userDao: UserDao) {
@@ -20,9 +21,6 @@ export class UserService {
             // Compare passwd
             let valid = await comparePassWithHash(passwd, user.passwd);
             if(!valid) throw new BadRequest("User not found.");
-            // Get user accounts
-            // let accounts = await this.userDao.getAccountsByUserId(user.id);
-            // user.accounts.push(...accounts);
             user.passwd = "";
         } catch(e) {
             throw e;
@@ -45,4 +43,10 @@ export class UserService {
 
         return newUser;
     }
+
+    Factory() {
+        let userDao: UserDao = UserDao.prototype.Factory();
+        return new UserService(userDao);
+    }   
+
 }

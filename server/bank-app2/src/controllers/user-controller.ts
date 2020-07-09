@@ -7,11 +7,10 @@ import { Role } from "../entities/Role";
 import { Principal } from "../entities/Principal";
 import { createJwt } from "../utils/jwt-util";
 import { ServerError } from "../exceptions/server-error";
-import { Container } from "../container/container";
 
-export function userController(container: Container): Router {
+export function userController(): Router {
     
-    let userService: UserService = container.getSingleton(UserService);
+    let userService: UserService = UserService.prototype.Factory();
     let router = Router();
 
     router.post("/register", async (req: Request, res: Response) => {
