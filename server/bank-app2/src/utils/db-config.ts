@@ -1,25 +1,48 @@
 import config from "../../resources/db-conn.json";
 import mysql, { Pool } from "mysql";
 
+var SINGLE_POOL: Pool;
+
 export function getPool(numOfConn?: number): Pool {
+    if(poolExists()) {
+        return SINGLE_POOL;
+    }
+
+    let conf = getPoolConfig();
+    createPool(conf);
+    
+    return SINGLE_POOL;
+}
+
+function poolExists() {
+    return !!SINGLE_POOL;
+}
+
+function getPoolConfig(numOfConn?: number): any {
     let conf = Object.create(config);
     if(numOfConn && numOfConn > 0 && numOfConn < 100) {
         conf.connectionLimit = numOfConn;
     }
+    return conf;
+}
 
-    var pool = mysql.createPool(conf);
+function createPool(conf: any): void {
+    try {
+        SINGLE_POOL = mysql.createPool(conf);
+        addPoolEvents();
+    } catch(e) {
+        throw e;
+    }
+}
 
-    pool.on('acquire', function (connection) {
+function addPoolEvents() {
+    SINGLE_POOL.on('acquire', function (connection) {
         console.log('Connection %d acquired', connection.threadId);
     });
-    
-    pool.on('enqueue', function () {
+    SINGLE_POOL.on('enqueue', function () {
         console.log('Waiting for available connection slot');
     });
-    
-    pool.on('release', function (connection) {
+    SINGLE_POOL.on('release', function (connection) {
         console.log('Connection %d released', connection.threadId);
     });
-
-    return pool;
 }

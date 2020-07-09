@@ -6,7 +6,7 @@ import { ServerError } from "../exceptions/server-error";
 import { BadRequest } from "../exceptions/bad-request";
 import { createAccountUUID } from "../utils/randomNumGen";
 
-export class UserDao implements DAO<User> {
+export class UserDao implements DAO {
 
     pool: Pool;
 
