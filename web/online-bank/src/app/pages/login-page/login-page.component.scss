@@ -4,12 +4,13 @@
 .login-container {
 	display: flex;
 	flex-direction: column;
-	
+	justify-content: center;
+
 	margin: 0 auto;
 	margin-top: 5rem;
-	padding: 2rem 0rem;
+	padding: 3rem 0rem 5rem 0rem;
 
-	width: 25rem;
+	width: 35rem;
 	max-width: 95%;
 
 	border-radius: 7px;
@@ -18,11 +19,13 @@
 	.login-title {
 		display: block;
 		margin: 0 auto;
-		padding: 1rem;
+		padding-top: 1rem;
+		padding-bottom: 2rem;
 		font-size: 2rem;
 	}
 
 	mat-form-field {
+		display: block;
 		padding: 0 2rem;
 		width: 80%;
 		margin: 0 auto;
