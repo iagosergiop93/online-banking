@@ -54,7 +54,8 @@ export class TransactionDao implements DAO{
                                         console.log("After insert transaction", results, values);
                                         conn.commit();
                                         resolve(account);
-                                    });
+                                    }
+                                );
                             });
                     });
                 } catch(e) {
@@ -72,6 +73,31 @@ export class TransactionDao implements DAO{
         throw new Error("Method not implemented.");
     }
 
+    getByAccountNumber(accountNumber: string): Promise<Transaction[]> {
+        console.log("In getByUserId transaction DAO: ");
+        return new Promise((resolve, reject) => {
+            this.pool.getConnection((err, conn) => {
+                try {
+                    if(err) throw new ServerError("Error getting connection.");
+                    let sql = "SELECT * FROM bank_transac WHERE fromAcc = ? OR toAcc = ?";
+                    conn.query(sql, [accountNumber, accountNumber], (err, results, fields) => {
+                        if(err) throw new ServerError("Failed while making the query.");
+                        let transactions: Transaction[] = this.mapResultSetToTransactions(results);
+                        resolve(transactions);
+                    })
+                } catch(e) {
+                    reject(e);
+                } finally {
+                    conn.release();
+                }
+            });
+        })
+    }
+
+    mapResultSetToTransactions(results: any[]) {
+        console.log(results);
+        return results;
+    }
 
     
 }

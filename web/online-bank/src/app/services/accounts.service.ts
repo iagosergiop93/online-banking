@@ -41,7 +41,7 @@ export class AccountsService {
 			);
 
 		} catch (err) {
-			
+			throw err;	
 		}
 	}
 
