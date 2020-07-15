@@ -114,3 +114,4 @@ build/
 # Custom Iago
 resources/
 *.sql
+pictures/
