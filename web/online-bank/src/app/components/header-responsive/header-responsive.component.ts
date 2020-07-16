@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { getHeaderItems } from 'src/app/utils/header-utils';
 
 @Component({
   selector: 'app-header-responsive',
@@ -7,23 +8,21 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HeaderResponsiveComponent implements OnInit {
 
-  title = 'Pereira Bank';
-  toggle = false;
+	@Input() page = "landing-page";
 
-  items = [
-    { name: 'Checking', link: '' },
-    { name: 'Savings', link: '' },
-    { name: 'Investments', link: '' },
-    { name: 'Sign up', link: '' }
-  ];
+	title = 'Pereira Bank';
+	toggle = false;
 
-  toggleSidebar() {
-    this.toggle = !this.toggle;
-  }
+	items = [];
 
-  constructor() { }
+	toggleSidebar() {
+		this.toggle = !this.toggle;
+	}
 
-  ngOnInit() {
-  }
+	constructor() { }
+
+	ngOnInit() {
+		this.items = getHeaderItems(this.page);
+	}
 
 }

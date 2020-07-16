@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { SummaryComponent } from './summary/summary.component';
 import { BalanceComponent } from './balance/balance.component';
 import { TransactionHistoryComponent } from './transaction-history/transaction-history.component';
@@ -12,7 +12,7 @@ import { Transaction } from 'src/app/entities/transaction';
   templateUrl: './dashboard-page.component.html',
   styleUrls: ['./dashboard-page.component.scss']
 })
-export class DashboardPageComponent implements OnInit {
+export class DashboardPageComponent implements OnInit, AfterViewInit {
 
 	@ViewChild('summary') summary: SummaryComponent;
 	@ViewChild('balances') balances: BalanceComponent;
@@ -27,6 +27,10 @@ export class DashboardPageComponent implements OnInit {
 	}
 
 	ngOnInit(): void {
+		
+	}
+
+	ngAfterViewInit(): void {
 		this.getAccounts();
 	}
 

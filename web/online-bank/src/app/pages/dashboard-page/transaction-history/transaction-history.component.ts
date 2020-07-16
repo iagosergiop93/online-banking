@@ -12,7 +12,7 @@ export class TransactionHistoryComponent implements OnInit {
 	accDict = ACCOUNT_DICT;
 	trDict = TRANSACTION_DICT;
 
-	columnsToDisplay = ['date', 'value'];
+	columnsToDisplay = ['date', 'time', 'description' ,'value'];
 
 	AccountDictTransactionArray: any = {};
 
