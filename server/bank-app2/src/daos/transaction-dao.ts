@@ -3,14 +3,13 @@ import { Pool } from "mysql";
 import { ServerError } from "../exceptions/server-error";
 import { Account } from "../entities/Account";
 import { DAO } from "./DAO-interface";
+import { getPool } from "../utils/db-config";
 
-export class TransactionDao implements DAO{
+export class TransactionDao implements DAO {
 
-    pool: Pool;
+    pool: Pool = getPool();
 
-    constructor(pool: Pool) {
-        this.pool = pool;
-    }
+    constructor() {}
 
     getAll(): Promise<Transaction[]> {
         throw new Error("Method not implemented.");
@@ -99,5 +98,8 @@ export class TransactionDao implements DAO{
         return results;
     }
 
-    
+    Factory() {
+        return new TransactionDao();
+    }
+
 }

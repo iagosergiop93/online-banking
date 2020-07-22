@@ -45,4 +45,9 @@ export class UserService {
 
         return newUser;
     }
+
+    Factory() {
+        let userDao: UserDao = UserDao.prototype.Factory();
+        return new UserService(userDao);
+    }
 }

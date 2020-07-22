@@ -5,13 +5,12 @@ import { Transaction, TransactionType } from "../entities/Transaction";
 import { TransactionService } from "../services/transaction-service";
 import { validateTransaction } from "../utils/validator";
 import { ServerError } from "../exceptions/server-error";
-import { Container } from "../container/container";
 import { AccountService } from "../services/account-service";
 
-export function transactionController(container: Container) {
+export function transactionController() {
 
-    let transactionService: TransactionService = container.getSingleton(TransactionService);
-    let accountService: AccountService = container.getSingleton(AccountService);
+    let transactionService: TransactionService = TransactionService.prototype.Factory();
+    let accountService: AccountService = AccountService.prototype.Factory();
     let router = Router();
 
     router.get("/account/:accNumber", async (req: Request, res: Response) => {

@@ -71,4 +71,11 @@ export class TransactionService {
         return account;
     }
 
+    Factory(): TransactionService {
+        const accountDao: AccountDao = AccountDao.prototype.Factory();
+        const transactionDao: TransactionDao = TransactionDao.prototype.Factory();
+
+        return new TransactionService(accountDao, transactionDao);
+    }
+
 }

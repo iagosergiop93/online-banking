@@ -44,4 +44,9 @@ export class AccountService {
         return match;
     }
 
+    Factory(): AccountService {
+        const accountDao = AccountDao.prototype.Factory();
+        return new AccountService(accountDao);
+    }
+
 }
