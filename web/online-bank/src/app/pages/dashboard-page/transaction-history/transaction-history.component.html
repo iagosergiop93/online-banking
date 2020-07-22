@@ -4,19 +4,19 @@
         <mat-tab *ngFor="let item of AccountDictTransactionArray | keyvalue" label="{{ accDict[item.key] }}" class="font-4">
             <table mat-table [dataSource]="item.value">
                 <ng-container matColumnDef="date">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-4"> Date </th>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-4 date-width"> Date </th>
                     <td mat-cell *matCellDef="let transaction"> {{ transaction._createdAt | date: "MM/dd/yyyy" }} </td>
                 </ng-container>
                 <ng-container matColumnDef="time">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-4"> Time </th>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-4 time-width"> Time </th>
                     <td mat-cell *matCellDef="let transaction"> {{ transaction._createdAt | date: "HH:mm" }} </td>
                 </ng-container>
                 <ng-container matColumnDef="description">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-4"> Description </th>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-4 desc-width"> Description </th>
                     <td mat-cell *matCellDef="let transaction"> {{ transaction.value }} </td>
                 </ng-container>
                 <ng-container matColumnDef="value">
-                    <th mat-header-cell *matHeaderCellDef class="font-4"> Value </th>
+                    <th mat-header-cell *matHeaderCellDef class="font-4 value-width"> Value </th>
                     <td mat-cell *matCellDef="let transaction"> {{ transaction.value }} </td>
                 </ng-container>
                 <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>

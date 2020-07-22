@@ -9,4 +9,15 @@ mat-tab {
 
 table {
     width: 100%;
+    min-width: 600px;
+}
+
+.date-width, .time-width, .value-width {
+    width: 20%;
+    min-width: 120px;
+}
+
+.desc-width {
+    width: 40%;
+    min-width: 240px;
 }

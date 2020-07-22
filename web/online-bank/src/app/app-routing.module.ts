@@ -12,8 +12,17 @@ import { DashboardPageComponent } from './pages/dashboard-page/dashboard-page.co
 
 const routes: Routes = [
   { path: "", component: LandingPageComponent },
-  { path: "login", component: LoginPageComponent },
+  
+  { path: "login", 
+    children: [
+      { path:"signin", component: LoginPageComponent },
+      { path:"signup", component: LoginPageComponent },
+      { path:"", redirectTo: "signin", pathMatch: 'full' }    
+    ] 
+  },
+
   { path: "home", component: DashboardPageComponent, canActivate: [AuthGuard], canActivateChild: [AuthGuard] },
+  
   { path: "**", redirectTo: "", pathMatch: 'full'}
 ];
 

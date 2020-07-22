@@ -1,61 +1,35 @@
-import { Component, OnInit } from '@angular/core';
-import { FormControl, Validators, FormGroup } from '@angular/forms';
-import { UsersService } from 'src/app/services/users.service';
-import { Credentials } from 'src/app/entities/credentials';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { whichPageLogin, getLoginLinks } from './login-util';
 
 @Component({
   selector: 'app-login-page',
   templateUrl: './login-page.component.html',
   styleUrls: ['./login-page.component.scss']
 })
-export class LoginPageComponent implements OnInit {
+export class LoginPageComponent implements OnInit, AfterViewInit {
 
-	loginForm: FormGroup;
-	userService: UsersService;
 	router: Router;
+	
+	page: string = "";
+	links = [];
 
-	get f() {
-		return this.loginForm.controls;
-	}
-
-	constructor(userService: UsersService, router: Router) {
-		this.userService = userService;
+	constructor(router: Router) {
 		this.router = router;
 	}
 
-	ngOnInit() {
-		this.loginForm = new FormGroup({
-			email: new FormControl('', [
-				Validators.required,
-				Validators.email,
-			]),
-			passwd: new FormControl('', [
-				Validators.required,
-				Validators.minLength(4)
-			])
-		});
+	ngOnInit(): void {
+		this.page = whichPageLogin(this.router);
+		this.links = getLoginLinks(this.page);
 	}
 
-	submitForm() {
-		const result = Object.assign({}, this.loginForm.value);
-		let cred = new Credentials(result.email, result.passwd);
+	ngAfterViewInit(): void {
 		
-		// Make the request
-		this.userService.login(cred).subscribe(
-			(res) => {
-				this.userLoggedInCallback();
-			},
-			(err) => {
-				console.log(err);
-			}
-		);
-
-		this.loginForm.reset();
 	}
 
-	userLoggedInCallback() {
-		this.router.navigate(['/home']);
+	goTo(path: string) {
+		this.router.navigate([path]);
 	}
+
 
 }

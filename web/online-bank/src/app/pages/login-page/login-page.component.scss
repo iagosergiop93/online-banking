@@ -1,51 +1,20 @@
-@import '../../../styles.scss';
+@import "../../../styles.scss";
 
-/* Login and Register */
-.login-container {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
+.login-links-box {
+    padding: $login-internal-padding;
+    width: $login-internal-width;
+    margin: $login-internal-margin;
+    margin-top: 50px;
 
-	margin: 0 auto;
-	margin-top: 5rem;
-	padding: 3rem 0rem 5rem 0rem;
+    span {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-size: 1rem;
+        cursor: pointer;
+    }
 
-	width: 35rem;
-	max-width: 95%;
-
-	border-radius: 7px;
-	border: 2px solid rgba(200,200,200,0.5);
-
-	.login-title {
-		display: block;
-		margin: 0 auto;
-		padding-top: 1rem;
-		padding-bottom: 2rem;
-		font-size: 2rem;
-	}
-
-	mat-form-field {
-		display: block;
-		padding: 0 2rem;
-		width: 80%;
-		margin: 0 auto;
-		margin-bottom: 1rem;
-	}
-
-	button {
-		width: 50%;
-		display: block;
-		margin: 0 auto;
-		color: #ffffff;
-		background: $primary;
-	}
-
-}
-
-@media(max-width: 650px) {
-	.login-container {
-		width: 80%;
-		margin-top: 5rem;
-		overflow-x: hidden;
-	}
+    span:hover {
+        color: $dark;
+        text-decoration: underline $dark solid;
+    }
 }

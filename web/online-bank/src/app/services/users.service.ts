@@ -7,7 +7,8 @@ import { catchError, map } from 'rxjs/operators';
 import { User } from '../entities/user';
 import { tokenExists, getToken, saveToken, saveInfo, deleteToken } from '../utils/token-handler';
 import { handleError } from '../exceptions/exceptions';
-import { credentialsValidator } from '../utils/validator';
+import { credentialsValidator, registerUserFormValidator } from '../utils/validator';
+import { RegisterUserForm } from '../entities/principal';
 
 
 @Injectable({
@@ -19,6 +20,13 @@ export class UsersService {
 
 	constructor(http: HttpClient) {
 		this.http = http;
+	}
+
+	register(registerForm: RegisterUserForm) {
+		deleteToken();
+		if(!registerUserFormValidator(registerForm)) throw new Error("Invalid Field");
+		return this.http.post<User>(API_URL + "/users/register", registerForm, { observe: 'response' })
+				.pipe(map(this.saveLoginInfo));
 	}
 
 	login(cred: Credentials): Observable<HttpResponse<User>> {

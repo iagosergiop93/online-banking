@@ -25,6 +25,8 @@ import { FooterResponsiveComponent } from './components/footer-responsive/footer
 import { SummaryComponent } from './pages/dashboard-page/summary/summary.component';
 import { BalanceComponent } from './pages/dashboard-page/balance/balance.component';
 import { TransactionHistoryComponent } from './pages/dashboard-page/transaction-history/transaction-history.component';
+import { SigninformComponent } from './pages/login-page/signinform/signinform.component';
+import { SignupformComponent } from './pages/login-page/signupform/signupform.component';
 
 
 @NgModule({
@@ -38,7 +40,9 @@ import { TransactionHistoryComponent } from './pages/dashboard-page/transaction-
     FooterResponsiveComponent,
     SummaryComponent,
     BalanceComponent,
-    TransactionHistoryComponent
+    TransactionHistoryComponent,
+    SigninformComponent,
+    SignupformComponent,
   ],
   imports: [
     HttpClientModule,

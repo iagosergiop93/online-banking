@@ -1,0 +1,28 @@
+<span class="login-title">Sign up</span>
+
+<form [formGroup]="loginForm" (ngSubmit)="submitForm()">
+    
+    <mat-form-field appearance="legacy" class="login-mat-form-field">
+        <input matInput formControlName="firstName" placeholder="First Name" type="text">
+        <mat-error *ngIf="f.firstName.hasError('required')">Invalid First Name</mat-error>
+    </mat-form-field>
+    
+    <mat-form-field appearance="legacy" class="login-mat-form-field">
+        <input matInput formControlName="lastName" placeholder="Last Name" type="text">
+        <mat-error *ngIf="f.lastName.hasError('required')">Invalid Last Name</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="legacy" class="login-mat-form-field">
+        <input matInput formControlName="email" placeholder="Email" type="email">
+        <mat-error *ngIf="f.email.hasError('email') && !f.email.hasError('required')">Invalid email</mat-error>
+    </mat-form-field>
+    
+    <mat-form-field appearance="legacy" class="login-mat-form-field">
+        <input matInput formControlName="passwd" placeholder="Password" type="password">
+        <mat-error *ngIf="f.passwd.hasError('required')">Invalid Password</mat-error>
+    </mat-form-field>
+
+    <br>
+
+    <button mat-button type="submit" class="login-button">Sign up</button>
+</form>
