@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { SummaryComponent } from './summary/summary.component';
 import { BalanceComponent } from './balance/balance.component';
 import { TransactionHistoryComponent } from './transaction-history/transaction-history.component';
@@ -12,7 +12,7 @@ import { Transaction } from 'src/app/entities/transaction';
   templateUrl: './dashboard-page.component.html',
   styleUrls: ['./dashboard-page.component.scss']
 })
-export class DashboardPageComponent implements OnInit, AfterViewInit {
+export class DashboardPageComponent implements OnInit, AfterViewInit, OnDestroy {
 
 	@ViewChild('summary') summary: SummaryComponent;
 	@ViewChild('balances') balances: BalanceComponent;
@@ -34,25 +34,32 @@ export class DashboardPageComponent implements OnInit, AfterViewInit {
 		this.getAccounts();
 	}
 
+	ngOnDestroy(): void {
+		
+	}
+
 	private getAccounts() {
-		this.accountsService.getAccountsInfo();
-		this.accountsService.accounts.subscribe(
+		this.accountsService.getAccountsInfo().subscribe(
 			(accounts: Account[]) => {
 				this.balances.accounts = accounts;
+				this.summary.accounts = accounts;
+				
 				accounts.forEach((acc) => {
 					this.getTransactions(acc.accountNumber, acc.type);
 				});
+
+				this.summary.createAccountsDoughnutChart();
 			}
 		);
 	}
 
 	private getTransactions(accountNumber: string, accountType: AccountType) {
-		this.transactionsService.getTransactions(accountNumber);
-		this.transactionsService.transactions.subscribe(
+		this.transactionsService.getTransactions(accountNumber).subscribe(
 			(transactions: Transaction[]) => {
 				this.transactionHistory.AccountDictTransactionArray[accountType] = transactions;
+				this.summary.AccountDictTransactionArray[accountType] = transactions;
 			}
-		);
+		)
 	}
 
 

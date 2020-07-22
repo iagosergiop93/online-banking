@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Account, ACCOUNT_DICT } from 'src/app/entities/account';
+import { createDoughnutChart } from 'src/app/utils/charts';
 
 @Component({
   selector: 'app-summary',
@@ -7,9 +9,22 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SummaryComponent implements OnInit {
 
-  constructor() { }
+	accounts: Account[];
+	AccountDictTransactionArray: any = {};
 
-  ngOnInit(): void {
-  }
+	constructor() { }
+
+	ngOnInit(): void {
+	}
+
+	createAccountsDoughnutChart() {
+		let doughnutData = this.accounts.map(item => item.balance);
+		let doughnutLabels = this.accounts.map(item => ACCOUNT_DICT[item.type]);
+		createDoughnutChart(doughnutLabels, doughnutData, 'doughnutChart');
+	}
+
+	createLineChart() {
+
+	}
 
 }
