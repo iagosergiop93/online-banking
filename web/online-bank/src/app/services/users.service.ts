@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpResponse, HttpHeaders, HttpRequest } from '@angular/common/http';
+import { HttpClient, HttpResponse, HttpHeaders } from '@angular/common/http';
 import { Credentials } from '../entities/credentials';
 import { API_URL } from '../../environments/environment';
 import { Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { User } from '../entities/user';
-import { ValidatorService } from './validator.service';
 import { tokenExists, getToken, saveToken, saveInfo, deleteToken } from '../utils/token-handler';
 import { handleError } from '../exceptions/exceptions';
+import { credentialsValidator } from '../utils/validator';
 
 
 @Injectable({
@@ -16,17 +16,14 @@ import { handleError } from '../exceptions/exceptions';
 export class UsersService {
 
 	http: HttpClient;
-	validator: ValidatorService;
 
-	constructor(http: HttpClient,
-		validator: ValidatorService) {
+	constructor(http: HttpClient) {
 		this.http = http;
-		this.validator = validator;
 	}
 
 	login(cred: Credentials): Observable<HttpResponse<User>> {
 		deleteToken();
-		if(!this.validator.credentials(cred)) throw new Error("Invalid Credentials");
+		if(!credentialsValidator(cred)) throw new Error("Invalid Credentials");
 		return this.http.post<User>(API_URL + "/users/login", cred, { observe: 'response' })
 				.pipe(map(this.saveLoginInfo));
 	}

@@ -3,14 +3,13 @@ import { Account } from "../entities/Account";
 import { Pool } from "mysql";
 import { ServerError } from "../exceptions/server-error";
 import { BadRequest } from "../exceptions/bad-request";
+import { getPool } from "../utils/db-config";
 
 export class AccountDao implements DAO {
 
-    pool: Pool;
+    pool: Pool = getPool();
 
-    constructor(pool: Pool) {
-        this.pool = pool;
-    }
+    constructor() {}
 
     getAll(): Promise<Account[]> {
         throw new Error("Method not implemented.");
@@ -82,6 +81,10 @@ export class AccountDao implements DAO {
             return new Account(item.id, item.accountNumber, item.balance, item.type, item._createdAt, item._updatedAt);
         });
         return accounts;
+    }
+
+    Factory() {
+        return new AccountDao();
     }
 
 }

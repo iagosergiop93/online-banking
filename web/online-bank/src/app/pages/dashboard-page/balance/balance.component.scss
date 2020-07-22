@@ -1,9 +1,10 @@
 @import "../../../../styles.scss";
 
 .flex-balance {
-    width: 100%;
+    width: 80%;
+    margin: 0 auto;
     display: flex;
-    justify-content: center;
+    justify-content: start;
     padding: 1rem;
 }
 

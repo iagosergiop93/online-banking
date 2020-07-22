@@ -20,7 +20,7 @@ function poolExists() {
 
 function getPoolConfig(numOfConn?: number): any {
     let conf = Object.create(config);
-    if(!!numOfConn && numOfConn > 0 && numOfConn < 100) {
+    if(!!numOfConn && numOfConn > 0 && numOfConn < 1000) {
         conf.connectionLimit = numOfConn;
     }
     return conf;

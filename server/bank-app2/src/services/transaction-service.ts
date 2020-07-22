@@ -15,32 +15,23 @@ export class TransactionService {
         this.transactionDao = transactionDao;
     }
 
-    processTransaction(transaction: Transaction, account: Account) {
-        console.log("Process transaction");
-        console.log(transaction.toString());
-        
-        switch(transaction.type) {
-            case TransactionType.DEPOSIT:
-                console.log("deposit");
-                account.balance = account.balance + transaction.value;
-                break;
-            case TransactionType.WITHDRAW:
-                account.balance -= transaction.value;
-                break;
-            default:
-                throw new BadRequest("Invalid request.");
+    async getTransactionsByAccountNumber(accountNumber: string): Promise<Transaction[]> {
+        let transactions: Transaction[] = []
+        try {
+            transactions = await this.transactionDao.getByAccountNumber(accountNumber);
+        } catch(e) {
+            throw e;
         }
-        console.log(account.toString());
-        return account;
+
+        return transactions;
     }
 
     async simpleTransaction(transaction: Transaction, principal: Principal): Promise<boolean> {
         let accounts: Account[] = null;
 
         try {
-            // Check if account belongs to user who is making the deposit
+            // Check if account belongs to user who is making the transaction
             accounts = await this.accountDao.getAccountsByUserId(principal.id);
-            console.log(accounts[0].toString());
             let account = accounts.filter(acc => {
                 return transaction.toAcc == acc.accountNumber;
             }).pop();
@@ -59,6 +50,32 @@ export class TransactionService {
         
         
         return true;
+    }
+
+    private processTransaction(transaction: Transaction, account: Account) {
+        console.log("Process transaction");
+        console.log(transaction.toString());
+        
+        switch(transaction.type) {
+            case TransactionType.DEPOSIT:
+                console.log("deposit");
+                account.balance = account.balance + transaction.value;
+                break;
+            case TransactionType.WITHDRAW:
+                account.balance -= transaction.value;
+                break;
+            default:
+                throw new BadRequest("Invalid request.");
+        }
+        console.log(account.toString());
+        return account;
+    }
+
+    Factory(): TransactionService {
+        const accountDao: AccountDao = AccountDao.prototype.Factory();
+        const transactionDao: TransactionDao = TransactionDao.prototype.Factory();
+
+        return new TransactionService(accountDao, transactionDao);
     }
 
 }

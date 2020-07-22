@@ -1,6 +1,4 @@
-import { User } from "../entities/User";
 import { Account, AccountType } from "../entities/Account";
-import { Role } from "../entities/Role";
 import { AccountDao } from "../daos/account-dao";
 import { createAccountUUID } from "../utils/randomNumGen";
 
@@ -33,5 +31,22 @@ export class AccountService {
         return accounts;
     }
 
+    async matchAccountByUserId(accNumber: string, id: number): Promise<boolean> {
+        let match = false;
+        try {
+            let accounts = await this.getAccountsByUserId(id);
+            accounts.forEach(acc => {
+                if(acc.accountNumber === accNumber) match = true;
+            });
+        } catch(e) {
+            throw e;
+        }
+        return match;
+    }
+
+    Factory(): AccountService {
+        const accountDao = AccountDao.prototype.Factory();
+        return new AccountService(accountDao);
+    }
 
 }

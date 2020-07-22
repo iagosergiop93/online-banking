@@ -1,5 +1,7 @@
+<app-header-responsive [page]="'dashboard'"></app-header-responsive>
+
 <mat-sidenav-container>
-    <mat-sidenav #sidenav>
+    <mat-sidenav #sidenav [mode]="'side'" opened>
         <p><button mat-button (click)="sidenav.toggle()">Toggle</button></p>
         
     </mat-sidenav>
@@ -7,12 +9,16 @@
     <mat-sidenav-content>
         <!-- Summary Section -->
         <app-summary #summary></app-summary>
-            
+
         <!-- Balance Section -->
         <app-balance #balances></app-balance>
         
         <!-- Transaction History Section -->
         <app-transaction-history #transactions></app-transaction-history>
-
+        
     </mat-sidenav-content>
+    
+    <app-footer-responsive></app-footer-responsive>
 </mat-sidenav-container>
+
+<app-footer-responsive></app-footer-responsive>

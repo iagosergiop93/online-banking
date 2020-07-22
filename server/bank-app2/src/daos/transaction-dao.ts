@@ -3,14 +3,13 @@ import { Pool } from "mysql";
 import { ServerError } from "../exceptions/server-error";
 import { Account } from "../entities/Account";
 import { DAO } from "./DAO-interface";
+import { getPool } from "../utils/db-config";
 
-export class TransactionDao implements DAO{
+export class TransactionDao implements DAO {
 
-    pool: Pool;
+    pool: Pool = getPool();
 
-    constructor(pool: Pool) {
-        this.pool = pool;
-    }
+    constructor() {}
 
     getAll(): Promise<Transaction[]> {
         throw new Error("Method not implemented.");
@@ -54,7 +53,8 @@ export class TransactionDao implements DAO{
                                         console.log("After insert transaction", results, values);
                                         conn.commit();
                                         resolve(account);
-                                    });
+                                    }
+                                );
                             });
                     });
                 } catch(e) {
@@ -72,6 +72,34 @@ export class TransactionDao implements DAO{
         throw new Error("Method not implemented.");
     }
 
+    getByAccountNumber(accountNumber: string): Promise<Transaction[]> {
+        console.log("In getByUserId transaction DAO: ");
+        return new Promise((resolve, reject) => {
+            this.pool.getConnection((err, conn) => {
+                try {
+                    if(err) throw new ServerError("Error getting connection.");
+                    let sql = "SELECT * FROM bank_transac WHERE fromAcc = ? OR toAcc = ?";
+                    conn.query(sql, [accountNumber, accountNumber], (err, results, fields) => {
+                        if(err) throw new ServerError("Failed while making the query.");
+                        let transactions: Transaction[] = this.mapResultSetToTransactions(results);
+                        resolve(transactions);
+                    })
+                } catch(e) {
+                    reject(e);
+                } finally {
+                    conn.release();
+                }
+            });
+        })
+    }
 
-    
+    mapResultSetToTransactions(results: any[]) {
+        console.log(results);
+        return results;
+    }
+
+    Factory() {
+        return new TransactionDao();
+    }
+
 }

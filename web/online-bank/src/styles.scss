@@ -3,7 +3,7 @@
 html, body { height: 100%; overflow-x: hidden; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
-$content-width: 1200px;
+$content-width: 1400px;
 
 $primary: #3670aa;
 $dark: #0b3c7f;
@@ -107,6 +107,7 @@ $grey: #ebebeb;
 
 .section-title {
     display: block;
+    line-height: rem;
     padding: 1rem;
     padding-bottom: 5px;
     width: 100%;

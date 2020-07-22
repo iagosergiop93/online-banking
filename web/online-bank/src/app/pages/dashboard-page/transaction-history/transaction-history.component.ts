@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Transaction, TRANSACTION_DICT } from 'src/app/entities/transaction';
+import { Account, ACCOUNT_DICT } from 'src/app/entities/account';
 
 @Component({
   selector: 'app-transaction-history',
@@ -7,9 +9,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TransactionHistoryComponent implements OnInit {
 
-  constructor() { }
+	accDict = ACCOUNT_DICT;
+	trDict = TRANSACTION_DICT;
 
-  ngOnInit(): void {
-  }
+	columnsToDisplay = ['date', 'time', 'description' ,'value'];
+
+	AccountDictTransactionArray: any = {};
+
+	constructor() { }
+
+	ngOnInit(): void {
+	}
 
 }

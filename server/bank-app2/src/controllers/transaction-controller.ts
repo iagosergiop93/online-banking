@@ -5,12 +5,27 @@ import { Transaction, TransactionType } from "../entities/Transaction";
 import { TransactionService } from "../services/transaction-service";
 import { validateTransaction } from "../utils/validator";
 import { ServerError } from "../exceptions/server-error";
-import { Container } from "../container/container";
+import { AccountService } from "../services/account-service";
 
-export function transactionController(container: Container) {
+export function transactionController() {
 
-    let transactionService = container.getSingleton(TransactionService)
+    let transactionService: TransactionService = TransactionService.prototype.Factory();
+    let accountService: AccountService = AccountService.prototype.Factory();
     let router = Router();
+
+    router.get("/account/:accNumber", async (req: Request, res: Response) => {
+        try {
+            if(!res.locals.authorization) throw new BadRequest("User is not authenticated");
+            let principal: Principal = JSON.parse(res.locals.authorization.data);
+            let accNumber = req.params["accNumber"];
+            let match = await accountService.matchAccountByUserId(accNumber, principal.id);
+            if(!match) throw new BadRequest("Unauthorized User");
+            let transactions = await transactionService.getTransactionsByAccountNumber(accNumber);
+            res.status(200).send(transactions);
+        } catch(e) {
+            res.status(e.status).send(e);
+        }
+    });
 
     router.post("/simple", async (req: Request, res: Response) => {
         try {
