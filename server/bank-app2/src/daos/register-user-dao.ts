@@ -3,6 +3,6 @@ import { Pool } from "mysql";
 import { getPool } from "../utils/db-config";
 
 
-export class RegisterUserDao implements DAO {
+export class RegisterUserDao  {
     pool: Pool = getPool();
 }

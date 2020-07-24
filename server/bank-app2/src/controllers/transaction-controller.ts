@@ -1,4 +1,4 @@
-import { Router, Request, Response } from "express";
+import { Router, Request, Response, NextFunction } from "express";
 import { BadRequest } from "../exceptions/bad-request";
 import { Principal } from "../entities/Principal";
 import { Transaction, TransactionType } from "../entities/Transaction";
@@ -27,16 +27,10 @@ export function transactionController() {
         }
     });
 
-    router.post("/simple", async (req: Request, res: Response) => {
+    router.post("/simple", postTransactionMiddleware, async (req: Request, res: Response) => {
         try {
-            // Validate Transaction
-            validateTransaction(req);
             if((req.body.type != TransactionType.DEPOSIT && req.body.type != TransactionType.WITHDRAW) || req.body.fromAcc != req.body.toAcc) throw new BadRequest("Invalid Request");
-            // Check if user is authorized
-            // Get principal
-            if(!res.locals.authorization) throw new BadRequest("Missing fields");
             let principal: Principal = JSON.parse(res.locals.authorization.data);
-            if(!principal.id || principal.id == 0) throw new BadRequest("Missing fields");
             let transaction: Transaction = new Transaction(req.body.fromAcc,req.body.toAcc, req.body.type, req.body.value);
 
             let worked = await transactionService.simpleTransaction(transaction, principal);
@@ -47,16 +41,10 @@ export function transactionController() {
         }
     });
 
-    router.post("/transfer", async (req: Request, res: Response) => {
+    router.post("/transfer", postTransactionMiddleware, async (req: Request, res: Response) => {
         try {
-            // Validate Transaction
-            validateTransaction(req);
             if(req.body.type != TransactionType.TRANSFER || req.body.fromAcc == req.body.toAcc) throw new BadRequest("Invalid Request");
-            // Check if user is authorized
-            // Get principal
-            if(!res.locals.authorization) throw new BadRequest("Missing fields");
             let principal: Principal = JSON.parse(res.locals.authorization.data);
-            if(!principal.id || principal.id == 0) throw new BadRequest("Missing fields");
             let transaction: Transaction = new Transaction(req.body.fromAcc,req.body.toAcc, req.body.type, req.body.value);
             
             let worked = await transactionService.transfer(transaction, principal);
@@ -68,4 +56,14 @@ export function transactionController() {
     });
 
     return router;
+}
+
+function postTransactionMiddleware(req: Request, res: Response, next: NextFunction) {
+    try {
+        validateTransaction(req);
+        if(!res.locals.authorization) throw new BadRequest("User is not authenticated");
+        next();
+    } catch(e) {
+        res.status(e.status).send(e);
+    }
 }

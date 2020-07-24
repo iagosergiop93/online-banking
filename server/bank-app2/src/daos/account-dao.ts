@@ -15,8 +15,26 @@ export class AccountDao implements DAO {
         throw new Error("Method not implemented.");
     }
 
-    getById(id: number): Promise<Account> {
-        throw new Error("Method not implemented.");
+    getByAccountNumber(accNumber: string): Promise<Account> {
+        return new Promise((resolve, reject) => {
+            this.pool.getConnection((err, conn) => {
+                try {
+                    if(err) throw new ServerError("Error getting connection.");
+                    let sql = "SELECT * FROM accounts WHERE accountNumber = ?";
+                    conn.query(sql, [accNumber], (err, results, fields) => {
+                        if(err) throw new ServerError("Failed while making the query.");
+                        //console.log(results);
+                        if(results.length == 0) throw new BadRequest("User accounts not found.");
+                        let account = this.mapResultSetToAccounts(results).pop();
+                        resolve(account);
+                    });
+                } catch (e) {
+                    reject(e);
+                } finally {
+                    conn.release();
+                }
+            })
+        });
     }
 
     insert(obj: Account): Promise<Account> {

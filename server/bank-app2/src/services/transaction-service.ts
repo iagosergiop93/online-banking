@@ -27,17 +27,10 @@ export class TransactionService {
     }
 
     async simpleTransaction(transaction: Transaction, principal: Principal): Promise<boolean> {
-        let accounts: Account[] = null;
-
         try {
-            // Check if account belongs to user who is making the transaction
-            accounts = await this.accountDao.getAccountsByUserId(principal.id);
-            let account = accounts.filter(acc => {
-                return transaction.toAcc == acc.accountNumber;
-            }).pop();
-            if(!account) throw new BadRequest("Invalid Request");
-            // Make the deposit
-            account = this.processTransaction(transaction, account);
+            let account = await this.checkIfAccountBelongToUser(principal.id, transaction.toAcc);
+            // Process transaction
+            account = this.processSimpleTransaction(transaction, account);
             account = await this.transactionDao.insert(transaction, account);
         } catch(e) {
             throw e;
@@ -47,28 +40,51 @@ export class TransactionService {
     }
 
     async transfer(transaction: Transaction, principal: Principal): Promise<boolean> {
-        
+        try {
+            let fromAcc = await this.checkIfAccountBelongToUser(principal.id, transaction.fromAcc);
+            let toAcc = await this.accountDao.getByAccountNumber(transaction.toAcc);
+            // Process transaction
+            this.processTransferTransaction(transaction, fromAcc, toAcc);
+            
+        } catch(e) {
+            throw e;
+        }
         
         return true;
     }
 
-    private processTransaction(transaction: Transaction, account: Account) {
-        console.log("Process transaction");
-        console.log(transaction.toString());
-        
+    private async checkIfAccountBelongToUser(userId: number, accNumber: string): Promise<Account> {
+        let account;
+        try {
+            let accounts = await this.accountDao.getAccountsByUserId(userId);
+            account = accounts.filter(acc => {
+                return accNumber == acc.accountNumber;
+            }).pop();
+            if(!account) throw new BadRequest("Invalid Request");
+        } catch(e) {
+            throw e;
+        }
+
+        return account;
+    }
+
+    private processSimpleTransaction(transaction: Transaction, account: Account) {
         switch(transaction.type) {
             case TransactionType.DEPOSIT:
-                console.log("deposit");
                 account.balance = account.balance + transaction.value;
                 break;
             case TransactionType.WITHDRAW:
                 account.balance -= transaction.value;
                 break;
             default:
-                throw new BadRequest("Invalid request.");
+                throw new BadRequest("Invalid request");
         }
-        console.log(account.toString());
+
         return account;
+    }
+
+    private processTransferTransaction(transaction: Transaction, fromAcc: Account, toAcc: Account) {
+        return;
     }
 
     Factory(): TransactionService {

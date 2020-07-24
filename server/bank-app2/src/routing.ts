@@ -11,6 +11,7 @@ import { errorHandler } from "./exceptions/error-handler";
 import { userController } from "./controllers/user-controller";
 import { accountController } from "./controllers/account-controller";
 import { transactionController } from "./controllers/transaction-controller";
+import { testController } from "./controllers/test-controller";
 
 export function AppRouter(app: Express) {
 
@@ -21,5 +22,6 @@ export function AppRouter(app: Express) {
     app.use("/users", userController());
     app.use("/accounts", accountController());
     app.use("/transactions", transactionController());
+    app.use("/test", testController());
 
 }
