@@ -7,6 +7,7 @@ import { getPoolConnection, startTransaction, commitQuery, releaseConnection } f
 import { insertAccount, linkUserToAccount } from "../daos/account-dao";
 import { createAccountFacade } from "../facades/account-facade";
 import { AccountType } from "../entities/Account";
+import { PoolConnection } from "mysql";
 
 export class UserService {
 
@@ -15,16 +16,18 @@ export class UserService {
     async login(email: string, passwd: string): Promise<User> {
         console.log("In login service");
         let user: User;
+        let conn: PoolConnection;
         try {
-            let conn = await getPoolConnection();
+            conn = await getPoolConnection();
             user = await getByEmail(conn, email);
             // Compare passwd
             let valid = await comparePassWithHash(passwd, user.passwd);
             if(!valid) throw new BadRequest("User not found.");
             user.passwd = "";
-            releaseConnection(conn)
         } catch(e) {
             throw e;
+        } finally {
+            if(!!conn) releaseConnection(conn);
         }
 
         return user;
@@ -33,9 +36,10 @@ export class UserService {
     async registerUser(user: User): Promise<User> {
         console.log("In register service");
         let newUser: User;
+        let conn: PoolConnection;
         try {
             user.passwd = await createHash(user.passwd);
-            let conn = await startTransaction();
+            conn = await startTransaction();
             
             // Create User
             newUser = await insertUser(conn, user);
@@ -55,6 +59,8 @@ export class UserService {
         } catch(e) {
             console.log("Service catch");
             return Promise.reject(e);
+        } finally {
+            if(!!conn) conn.release();
         }
 
         return newUser;

@@ -20,10 +20,12 @@ export async function insertTransaction(conn: PoolConnection, transaction: Trans
 }
 
 export async function getTransactionsByAccountNumber(conn: PoolConnection, accountNumber: string): Promise<Transaction[]> {
+    console.log('In getTransactionsByAccountNumber', 'accountNumber = ' + accountNumber);
+    
     let transactions: Transaction[];
     try {
-        let sql = "SELECT * FROM bank_transac WHERE fromAcc = ? OR toAcc = ?";
-        let resultAndFields = await executeQueryInsideTransaction(conn, sql, [accountNumber]);
+        let sql = "SELECT * FROM bank_transac WHERE fromAcc = ? OR toAcc = ? ORDER BY _createdAt DESC";
+        let resultAndFields = await executeQueryInsideTransaction(conn, sql, [accountNumber, accountNumber]);
         let results = resultAndFields.shift();
         transactions = mapResultSetToTransactions(results);
     } catch (error) {

@@ -12,21 +12,26 @@ export class TransactionService {
     constructor() {}
 
     async getTransactionsByAccountNumber(accountNumber: string): Promise<Transaction[]> {
-        let transactions: Transaction[] = []
+        console.log("In getTransactionsByAccountNumber");
+        
+        let transactions: Transaction[];
+        let conn: PoolConnection;
         try {
-            let conn = await getPoolConnection();
+            conn = await getPoolConnection();
             transactions = await getTransactionsByAccountNumber(conn, accountNumber);
-            releaseConnection(conn);
         } catch(e) {
             throw e;
+        } finally {
+            if(!!conn) releaseConnection(conn);
         }
 
         return transactions;
     }
 
     async simpleTransaction(transaction: Transaction, principal: Principal): Promise<boolean> {
+        let conn: PoolConnection;
         try {
-            let conn = await startTransaction();
+            conn = await startTransaction();
             let account = await this.checkIfAccountBelongToUser(conn, principal.id, transaction.toAcc);
             // Process transaction
             account = this.processSimpleTransaction(transaction, account);
@@ -36,18 +41,23 @@ export class TransactionService {
 
         } catch(e) {
             throw e;
+        } finally {
+            if(!!conn) conn.release();
         }
 
         return true;
     }
 
     async transfer(transaction: Transaction, principal: Principal): Promise<boolean> {
+        let conn: PoolConnection;
         try {
-            let conn = await startTransaction();
+            conn = await startTransaction();
             commitQuery(conn);
             //TODO
         } catch(e) {
             throw e;
+        } finally {
+            if(!!conn) conn.release();
         }
         
         return true;

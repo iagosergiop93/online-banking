@@ -2,6 +2,7 @@ import { Account, AccountType } from "../entities/Account";
 import { insertAccount, getAccountsByUserId } from "../daos/account-dao";
 import { createAccountFacade } from "../facades/account-facade";
 import { startTransaction, commitQuery, getPoolConnection } from "../daos/queryMaker";
+import { Connection, PoolConnection } from "mysql";
 
 export class AccountService {
 
@@ -9,23 +10,29 @@ export class AccountService {
 
     async createAccount(type: AccountType): Promise<Account> {
         let account = createAccountFacade(type);
+        let conn: PoolConnection;
         try {
-            let conn = await startTransaction();
+            conn = await startTransaction();
             account = await insertAccount(conn, account);
             commitQuery(conn);
         } catch(e) {
             throw e;
+        } finally {
+            if(!!conn) conn.release();
         }
         return account;
     }
 
     async getAccountsByUserId(id: number): Promise<Account[]> {
         let accounts: Account[] = [];
+        let conn: PoolConnection;
         try {
-            let conn = await getPoolConnection();
+            conn = await getPoolConnection();
             accounts = await getAccountsByUserId(conn, id);
         } catch(e) {
             throw e;
+        } finally {
+            if(!!conn) conn.release();
         }
         return accounts;
     }
