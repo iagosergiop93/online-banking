@@ -1,29 +1,28 @@
 import { User } from "../entities/User";
-import { UserDao } from "../daos/user-dao";
+import { insertUser, getByEmail } from "../daos/user-dao";
 import { createHash, comparePassWithHash } from "../utils/secure";
 import { BadRequest } from "../exceptions/bad-request";
 import { ServerError } from "../exceptions/server-error";
+import { getPoolConnection, startTransaction, commitQuery, releaseConnection } from "../daos/queryMaker";
+import { insertAccount, linkUserToAccount } from "../daos/account-dao";
+import { createAccountFacade } from "../facades/account-facade";
+import { AccountType } from "../entities/Account";
 
 export class UserService {
 
-    private userDao: UserDao;
-
-    constructor(userDao: UserDao) {
-        this.userDao = userDao;
-    }
+    constructor() {}
 
     async login(email: string, passwd: string): Promise<User> {
         console.log("In login service");
         let user: User;
         try {
-            user = await this.userDao.getByEmail(email);
+            let conn = await getPoolConnection();
+            user = await getByEmail(conn, email);
             // Compare passwd
             let valid = await comparePassWithHash(passwd, user.passwd);
             if(!valid) throw new BadRequest("User not found.");
-            // Get user accounts
-            // let accounts = await this.userDao.getAccountsByUserId(user.id);
-            // user.accounts.push(...accounts);
             user.passwd = "";
+            releaseConnection(conn)
         } catch(e) {
             throw e;
         }
@@ -36,18 +35,32 @@ export class UserService {
         let newUser: User;
         try {
             user.passwd = await createHash(user.passwd);
-            newUser = await this.userDao.insert(user);
-            newUser.passwd = "";
+            let conn = await startTransaction();
+            
+            // Create User
+            newUser = await insertUser(conn, user);
             if(!newUser.id || newUser.id == 0) throw new ServerError("Failed to create user");
+
+            // Create Account
+            let account = createAccountFacade(AccountType.CHECKING);
+            account = await insertAccount(conn, account);
+
+            // Link User to Account
+            await linkUserToAccount(conn, newUser.id, account.accountNumber);
+
+            commitQuery(conn);
+            releaseConnection(conn);
+
+            newUser.passwd = "";
         } catch(e) {
-            throw e;
+            console.log("Service catch");
+            return Promise.reject(e);
         }
 
         return newUser;
     }
 
     Factory() {
-        let userDao: UserDao = UserDao.prototype.Factory();
-        return new UserService(userDao);
+        return new UserService();
     }
 }

@@ -1,24 +1,22 @@
 import { Transaction, TransactionType } from "../entities/Transaction";
 import { Principal } from "../entities/Principal";
-import { AccountDao } from "../daos/account-dao";
-import { TransactionDao } from "../daos/transaction-dao";
+import { getAccountsByUserId } from "../daos/account-dao";
 import { Account } from "../entities/Account";
 import { BadRequest } from "../exceptions/bad-request";
+import { startTransaction, getPoolConnection, commitQuery, releaseConnection } from "../daos/queryMaker";
+import { getTransactionsByAccountNumber, insertTransaction } from "../daos/transaction-dao";
+import { PoolConnection } from "mysql";
 
 export class TransactionService {
 
-    accountDao: AccountDao;
-    transactionDao: TransactionDao;
-
-    constructor(accountDao: AccountDao, transactionDao: TransactionDao) {
-        this.accountDao = accountDao;
-        this.transactionDao = transactionDao;
-    }
+    constructor() {}
 
     async getTransactionsByAccountNumber(accountNumber: string): Promise<Transaction[]> {
         let transactions: Transaction[] = []
         try {
-            transactions = await this.transactionDao.getByAccountNumber(accountNumber);
+            let conn = await getPoolConnection();
+            transactions = await getTransactionsByAccountNumber(conn, accountNumber);
+            releaseConnection(conn);
         } catch(e) {
             throw e;
         }
@@ -28,10 +26,14 @@ export class TransactionService {
 
     async simpleTransaction(transaction: Transaction, principal: Principal): Promise<boolean> {
         try {
-            let account = await this.checkIfAccountBelongToUser(principal.id, transaction.toAcc);
+            let conn = await startTransaction();
+            let account = await this.checkIfAccountBelongToUser(conn, principal.id, transaction.toAcc);
             // Process transaction
             account = this.processSimpleTransaction(transaction, account);
-            account = await this.transactionDao.insert(transaction, account);
+            account = await insertTransaction(conn, transaction, account);
+            commitQuery(conn);
+            releaseConnection(conn);
+
         } catch(e) {
             throw e;
         }
@@ -41,11 +43,9 @@ export class TransactionService {
 
     async transfer(transaction: Transaction, principal: Principal): Promise<boolean> {
         try {
-            let fromAcc = await this.checkIfAccountBelongToUser(principal.id, transaction.fromAcc);
-            let toAcc = await this.accountDao.getByAccountNumber(transaction.toAcc);
-            // Process transaction
-            this.processTransferTransaction(transaction, fromAcc, toAcc);
-            
+            let conn = await startTransaction();
+            commitQuery(conn);
+            //TODO
         } catch(e) {
             throw e;
         }
@@ -53,10 +53,10 @@ export class TransactionService {
         return true;
     }
 
-    private async checkIfAccountBelongToUser(userId: number, accNumber: string): Promise<Account> {
+    private async checkIfAccountBelongToUser(conn: PoolConnection, userId: number, accNumber: string): Promise<Account> {
         let account;
         try {
-            let accounts = await this.accountDao.getAccountsByUserId(userId);
+            let accounts = await getAccountsByUserId(conn, userId);
             account = accounts.filter(acc => {
                 return accNumber == acc.accountNumber;
             }).pop();
@@ -88,10 +88,7 @@ export class TransactionService {
     }
 
     Factory(): TransactionService {
-        const accountDao: AccountDao = AccountDao.prototype.Factory();
-        const transactionDao: TransactionDao = TransactionDao.prototype.Factory();
-
-        return new TransactionService(accountDao, transactionDao);
+        return new TransactionService();
     }
 
 }

@@ -6,8 +6,7 @@ export function testController() {
 
     router.post("/db-api", async (req, res) => {
         try {
-            let conn = await getPoolConnection();
-            conn = await startTransaction(conn);
+            let conn = await startTransaction();
             let sql = "INSERT INTO users (firstName, lastName, email, passwd, role) VALUES(?, ?, ?, ?, ?)";
             let queryArgs = ["Sergio", "Mendes", "sergio@gmail.com", "1234", 1]
             executeQueryInsideTransaction(conn, sql, queryArgs)

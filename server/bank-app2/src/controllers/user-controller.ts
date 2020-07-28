@@ -33,6 +33,7 @@ export function userController(): Router {
             res.status(201).send(principal);
 
         } catch(e) {
+            console.log("Controller catch");
             res.status(e.status).send(e);
         }
 

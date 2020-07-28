@@ -1,20 +1,18 @@
 import { Account, AccountType } from "../entities/Account";
-import { AccountDao } from "../daos/account-dao";
-import { createAccountUUID } from "../utils/randomNumGen";
+import { insertAccount, getAccountsByUserId } from "../daos/account-dao";
+import { createAccountFacade } from "../facades/account-facade";
+import { startTransaction, commitQuery, getPoolConnection } from "../daos/queryMaker";
 
 export class AccountService {
 
-    private accountDao: AccountDao;
+    constructor() {}
 
-    constructor(accountDao: AccountDao) {
-        this.accountDao = accountDao;
-    }
-
-    async createAccount(userId: number, type: AccountType): Promise<Account> {
-        let accNumber = createAccountUUID();
-        let account = new Account(0, accNumber, 0.0, type);
+    async createAccount(type: AccountType): Promise<Account> {
+        let account = createAccountFacade(type);
         try {
-            account = await this.accountDao.insert(account);
+            let conn = await startTransaction();
+            account = await insertAccount(conn, account);
+            commitQuery(conn);
         } catch(e) {
             throw e;
         }
@@ -24,7 +22,8 @@ export class AccountService {
     async getAccountsByUserId(id: number): Promise<Account[]> {
         let accounts: Account[] = [];
         try {
-            accounts = await this.accountDao.getAccountsByUserId(id);
+            let conn = await getPoolConnection();
+            accounts = await getAccountsByUserId(conn, id);
         } catch(e) {
             throw e;
         }
@@ -45,8 +44,7 @@ export class AccountService {
     }
 
     Factory(): AccountService {
-        const accountDao = AccountDao.prototype.Factory();
-        return new AccountService(accountDao);
+        return new AccountService();
     }
 
 }
