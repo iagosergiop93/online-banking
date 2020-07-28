@@ -12,7 +12,7 @@ export async function insertUser(conn: PoolConnection, user: User): Promise<User
     } catch(err) {
         console.error(err);
         conn.rollback();
-        if(err.code && err.code == "ER_DUP_ENTRY") return Promise.reject("A user with this email already exist.");
+        if(err.code && err.code == "ER_DUP_ENTRY") return Promise.reject(new ServerError("A user with this email already exist."));
         return Promise.reject(new ServerError("An unexpected error happened."));
     }
 

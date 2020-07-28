@@ -40,7 +40,7 @@ export function executeQueryInsideTransaction(conn: Connection, sql: string, que
             conn.query(sql, queryArgs, (err, results, values) => {
                 if(err) {
                     conn.rollback();
-                    throw new ServerError("An unexpected error happened.");
+                    reject(err);
                 }
                 resolve([results, values]);
             });
