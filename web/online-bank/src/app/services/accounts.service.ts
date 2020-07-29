@@ -22,23 +22,45 @@ export class AccountsService {
 	getAccountsInfo(): Observable<Account[]> {
 		try {
 			// Check token and Info existence
-			if(!tokenExists()) throw new Error("Unauthenticated User");
+			if(!tokenExists()) throw new Error('Unauthenticated User');
 			const principal: User = getInfo();
-			if(!userValidator(principal)) throw new Error("Invalid Credentials");
+			if(!userValidator(principal)) throw new Error('Invalid Credentials');
+
+			// Check cache
+			const accounts = this.getAccountsFromCache();
+			if(!!accounts) {
+				return new Observable(subscriber => {
+					subscriber.next(accounts);
+				});
+			}
 
 			// Make request
-			const url = API_URL + "/accounts/user/" + principal.id;
+			const url = API_URL + '/accounts/user/' + principal.id;
 			return this.http.get<Account[]>(url).pipe(map(
 				res => {
 					res.forEach((acc) => {
-						if(!accountValidator(acc)) throw new Error("Server Error");
+						if(!accountValidator(acc)) throw new Error('Server Error');
 					});
-					return res;	
+					return res;
 				})
 			);
 		} catch (err) {
-			throw err;	
+			throw err;
 		}
+	}
+
+	cacheAccounts(accounts) {
+		localStorage.setItem('accounts', JSON.stringify(accounts));
+		setTimeout(this.cleanAccoutsCache, 120000);
+	}
+
+	cleanAccoutsCache() {
+		localStorage.removeItem('accounts');
+	}
+
+	getAccountsFromCache(): Account[] {
+		if(!localStorage.getItem('accounts')) return;
+		return JSON.parse(localStorage.getItem('accounts')) as Account[];
 	}
 
 }

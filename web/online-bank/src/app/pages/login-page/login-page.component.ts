@@ -10,8 +10,8 @@ import { whichPageLogin, getLoginLinks } from './login-util';
 export class LoginPageComponent implements OnInit, AfterViewInit {
 
 	router: Router;
-	
-	page: string = "";
+
+	page = '';
 	links = [];
 
 	constructor(router: Router) {
@@ -23,9 +23,7 @@ export class LoginPageComponent implements OnInit, AfterViewInit {
 		this.links = getLoginLinks(this.page);
 	}
 
-	ngAfterViewInit(): void {
-		
-	}
+	ngAfterViewInit(): void {}
 
 	goTo(path: string) {
 		this.router.navigate([path]);

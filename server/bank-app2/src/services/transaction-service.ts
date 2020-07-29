@@ -37,12 +37,11 @@ export class TransactionService {
             account = this.processSimpleTransaction(transaction, account);
             account = await insertTransaction(conn, transaction, account);
             commitQuery(conn);
-            releaseConnection(conn);
 
         } catch(e) {
             throw e;
         } finally {
-            if(!!conn) conn.release();
+            if(!!conn) releaseConnection(conn);;
         }
 
         return true;
@@ -57,7 +56,7 @@ export class TransactionService {
         } catch(e) {
             throw e;
         } finally {
-            if(!!conn) conn.release();
+            if(!!conn) releaseConnection(conn);
         }
         
         return true;

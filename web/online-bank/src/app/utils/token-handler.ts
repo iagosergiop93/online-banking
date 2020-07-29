@@ -2,8 +2,8 @@ import { TOKEN } from '../../environments/environment';
 import { User } from '../entities/user';
 
 export function tokenExists(): boolean {
-	let tk = localStorage.getItem(TOKEN.name);
-	return !!tk && tk.indexOf(TOKEN.scheme) != -1;
+	const tk = localStorage.getItem(TOKEN.name);
+	return !!tk && tk.indexOf(TOKEN.scheme) !== -1;
 }
 
 export function saveToken(token: string): void {
@@ -12,7 +12,7 @@ export function saveToken(token: string): void {
 
 export function getToken(): string {
 	return localStorage.getItem(TOKEN.name);
-} 
+}
 
 export function saveInfo(userInfo: User) {
 	sessionStorage.setItem(TOKEN.userInfo, JSON.stringify(userInfo));
@@ -23,7 +23,7 @@ export function getInfo(): User {
 }
 
 export function deleteToken(): void {
-	if(tokenExists()) {
+	if (tokenExists()) {
 		localStorage.clear();
 		sessionStorage.clear();
 	}

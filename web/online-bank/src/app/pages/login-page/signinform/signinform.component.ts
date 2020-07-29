@@ -33,8 +33,8 @@ export class SigninformComponent implements OnInit {
 
 	submitForm() {
 		const result = Object.assign({}, this.loginForm.value);
-		let cred = new Credentials(result.email, result.passwd);
-		
+		const cred = new Credentials(result.email, result.passwd);
+
 		// Make the request
 		this.userService.login(cred).subscribe(
 			(res) => {

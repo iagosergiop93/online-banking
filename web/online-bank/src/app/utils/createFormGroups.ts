@@ -31,3 +31,15 @@ export function createSignUpFormGroup() {
         ])
     });
 }
+
+export function createSimpleTransactionFormGroup() {
+    return new FormGroup({
+        account: new FormControl('', [
+            Validators.required
+        ]),
+        value: new FormControl('', [
+            Validators.required,
+            Validators.min(0.1)
+        ])
+    });
+}

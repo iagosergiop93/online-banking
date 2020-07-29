@@ -9,6 +9,7 @@ import { tokenExists, getToken, saveToken, saveInfo, deleteToken } from '../util
 import { handleError } from '../exceptions/exceptions';
 import { credentialsValidator, registerUserFormValidator } from '../utils/validator';
 import { RegisterUserForm } from '../entities/principal';
+import { Router } from '@angular/router';
 
 
 @Injectable({
@@ -17,44 +18,51 @@ import { RegisterUserForm } from '../entities/principal';
 export class UsersService {
 
 	http: HttpClient;
+	router: Router;
 
-	constructor(http: HttpClient) {
+	constructor(http: HttpClient, router: Router) {
 		this.http = http;
+		this.router = router;
 	}
 
 	register(registerForm: RegisterUserForm) {
 		deleteToken();
-		if(!registerUserFormValidator(registerForm)) throw new Error("Invalid Field");
-		return this.http.post<User>(API_URL + "/users/register", registerForm, { observe: 'response' })
+		if(!registerUserFormValidator(registerForm)) throw new Error('Invalid Field');
+		return this.http.post<User>(API_URL + '/users/register', registerForm, { observe: 'response' })
 				.pipe(map(this.saveLoginInfo));
 	}
 
 	login(cred: Credentials): Observable<HttpResponse<User>> {
 		deleteToken();
-		if(!credentialsValidator(cred)) throw new Error("Invalid Credentials");
-		return this.http.post<User>(API_URL + "/users/login", cred, { observe: 'response' })
+		if(!credentialsValidator(cred)) throw new Error('Invalid Credentials');
+		return this.http.post<User>(API_URL + '/users/login', cred, { observe: 'response' })
 				.pipe(map(this.saveLoginInfo));
 	}
 
 	auth(): Observable<User> {
-		if(!tokenExists()) throw new Error("Token doesn't exist");
-		return this.http.post<User>(API_URL + "/users/auth", {}, {
+		if(!tokenExists()) throw new Error('Token doesn\'t exist');
+		return this.http.post<User>(API_URL + '/users/auth', {}, {
 			headers: new HttpHeaders({
-				'Authorization': getToken()
+				Authorization: getToken()
 			})
 		}).pipe(catchError(handleError));
 	}
 
+	logout(): void {
+		deleteToken();
+		this.router.navigate(['']);
+	}
+
 	saveLoginInfo(res: HttpResponse<User>): HttpResponse<User> {
 		// Save token
-		let token = res.headers.get("Authorization");
+		const token = res.headers.get('Authorization');
 		saveToken(token);
 
 		// Save User info
-		let info: User = res.body;
+		const info: User = res.body;
 		saveInfo(info);
 
 		return res;
 	}
-  
+
 }

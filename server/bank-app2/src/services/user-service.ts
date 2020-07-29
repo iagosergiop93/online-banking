@@ -1,5 +1,5 @@
 import { User } from "../entities/User";
-import { insertUser, getByEmail } from "../daos/user-dao";
+import { insertUser, getUserByEmail } from "../daos/user-dao";
 import { createHash, comparePassWithHash } from "../utils/secure";
 import { BadRequest } from "../exceptions/bad-request";
 import { ServerError } from "../exceptions/server-error";
@@ -19,7 +19,7 @@ export class UserService {
         let conn: PoolConnection;
         try {
             conn = await getPoolConnection();
-            user = await getByEmail(conn, email);
+            user = await getUserByEmail(conn, email);
             // Compare passwd
             let valid = await comparePassWithHash(passwd, user.passwd);
             if(!valid) throw new BadRequest("User not found.");
@@ -53,14 +53,13 @@ export class UserService {
             await linkUserToAccount(conn, newUser.id, account.accountNumber);
 
             commitQuery(conn);
-            releaseConnection(conn);
 
             newUser.passwd = "";
         } catch(e) {
             console.log("Service catch");
-            return Promise.reject(e);
+            throw e;
         } finally {
-            if(!!conn) conn.release();
+            if(!!conn) releaseConnection(conn);
         }
 
         return newUser;

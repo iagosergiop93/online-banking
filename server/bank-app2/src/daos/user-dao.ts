@@ -12,14 +12,14 @@ export async function insertUser(conn: PoolConnection, user: User): Promise<User
     } catch(err) {
         console.error(err);
         conn.rollback();
-        if(err.code && err.code == "ER_DUP_ENTRY") return Promise.reject(new ServerError("A user with this email already exist."));
+        if(err.code && err.code == "ER_DUP_ENTRY") return Promise.reject(new BadRequest("A user with this email already exist."));
         return Promise.reject(new ServerError("An unexpected error happened."));
     }
 
     return user;
 }
 
-export async function getByEmail(conn: PoolConnection, email: string): Promise<User> {
+export async function getUserByEmail(conn: PoolConnection, email: string): Promise<User> {
     let user: User;
     let sql = "SELECT * FROM users WHERE email = ?";
     try {
@@ -28,6 +28,7 @@ export async function getByEmail(conn: PoolConnection, email: string): Promise<U
         if(results.length == 0) throw new BadRequest("User not found.");
         user = mapResultSetToUsers(results).shift();
     } catch(e) {
+        console.log(e);
         return Promise.reject(new ServerError("An unexpected error happened."));
     }
 

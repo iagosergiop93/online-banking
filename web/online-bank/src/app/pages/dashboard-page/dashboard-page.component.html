@@ -2,23 +2,20 @@
 
 <mat-sidenav-container>
     <mat-sidenav #sidenav [mode]="'side'" opened>
-        <p><button mat-button (click)="sidenav.toggle()">Toggle</button></p>
-        
+        <!-- <p><button mat-button (click)="sidenav.toggle()">Toggle</button></p> -->
+        <app-side-menu-profile></app-side-menu-profile>
+        <app-side-menu-options></app-side-menu-options>
+
+        <button mat-raised-button color="primary" class="new-account">Create a new Account</button>
+
     </mat-sidenav>
 
     <mat-sidenav-content>
-        <!-- Summary Section -->
-        <app-summary #summary></app-summary>
+        
+        <router-outlet></router-outlet>
 
-        <!-- Balance Section -->
-        <app-balance #balances></app-balance>
-        
-        <!-- Transaction History Section -->
-        <app-transaction-history #transactions></app-transaction-history>
-        
     </mat-sidenav-content>
     
-    <app-footer-responsive></app-footer-responsive>
 </mat-sidenav-container>
 
 <app-footer-responsive></app-footer-responsive>

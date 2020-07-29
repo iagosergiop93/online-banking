@@ -1,0 +1,24 @@
+<app-balance #accounts></app-balance>
+
+<span class="section-title font-3">{{ transactionType }}</span>
+
+<form [formGroup]="transactionForm" (ngSubmit)="submitForm()">
+
+    <mat-form-field appearance="fill">
+        <mat-label>Choose an option</mat-label>
+        <mat-select>
+            <mat-option *ngFor="let item of accounts" value="item.accountNumber">
+                {{ accDict[item.type] }} - {{ item.accountNumber }}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="legacy" class="transaction-mat-form-field">
+        <input matInput formControlName="value" placeholder="Value" type="text">
+        <mat-error *ngIf="f.value.hasError('min') && !f.value.hasError('required')">Invalid value</mat-error>
+    </mat-form-field>
+
+    <br>
+
+    <button mat-button type="submit" class="login-button"> Make {{ transactionType }}</button>
+</form>
