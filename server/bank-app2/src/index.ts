@@ -3,8 +3,12 @@ import bodyParser from "body-parser";
 import helmet from "helmet";
 import cors from "cors";
 import corsConfig from "../resources/cors-config.json";
+import pinoHttp from "pino-http";
+
 import { AppRouter } from "./routing";
-//import { initializeContainer } from "./container/container-init";
+import { getPinoLogger } from "./utils/logger";
+
+const logger = pinoHttp(getPinoLogger());
 
 const PORT = 4201;
 const app = express();
@@ -12,6 +16,7 @@ const app = express();
 app.use(bodyParser.json());
 app.use(helmet());
 app.use(cors(corsConfig));
+app.use(logger)
 
 // Initialize Container
 //let container = initializeContainer();

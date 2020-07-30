@@ -8,13 +8,18 @@ import { insertAccount, linkUserToAccount } from "../daos/account-dao";
 import { createAccountFacade } from "../facades/account-facade";
 import { AccountType } from "../entities/Account";
 import { PoolConnection } from "mysql";
+import { getPinoLogger } from "../utils/logger";
+import { Logger } from "pino";
 
 export class UserService {
+    logger: Logger;
 
-    constructor() {}
+    constructor(logger: Logger) {
+        this.logger = logger;
+    }
 
     async login(email: string, passwd: string): Promise<User> {
-        console.log("In login service");
+        this.logger.debug("In userService login method");
         let user: User;
         let conn: PoolConnection;
         try {
@@ -34,7 +39,7 @@ export class UserService {
     }
 
     async registerUser(user: User): Promise<User> {
-        console.log("In register service");
+        this.logger.debug("In userService registerUser method");
         let newUser: User;
         let conn: PoolConnection;
         try {
@@ -66,6 +71,7 @@ export class UserService {
     }
 
     Factory() {
-        return new UserService();
+        const logger = getPinoLogger();
+        return new UserService(logger);
     }
 }

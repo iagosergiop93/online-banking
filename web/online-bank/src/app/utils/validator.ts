@@ -1,7 +1,6 @@
 import { Credentials } from '../entities/credentials';
 import { User } from '../entities/user';
 import { Account } from '../entities/account';
-import { RegisterUserForm } from '../entities/principal';
 
 export function emailValidator(email: string): boolean {
     if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
@@ -22,7 +21,7 @@ export function credentialsValidator(cred: Credentials): boolean {
     return emailValidator(cred.email) && passwordValidator(cred.passwd);
 }
 
-export function registerUserFormValidator(form: RegisterUserForm): boolean {
+export function registerUserFormValidator(form: any): boolean {
     if( !form.firstName || !form.lastName || !form.email || !form.passwd) return false;
     return emailValidator(form.email) && passwordValidator(form.passwd);
 }

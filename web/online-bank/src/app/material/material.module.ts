@@ -11,6 +11,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatTableModule } from '@angular/material/table';
 import { MatListModule } from '@angular/material/list';
 import { MatSelectModule } from '@angular/material/select';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
     declarations: [],
@@ -26,6 +27,7 @@ import { MatSelectModule } from '@angular/material/select';
       MatTableModule,
       MatListModule,
       MatSelectModule,
+      MatDialogModule
     ]
   })
   export class MaterialModule { }

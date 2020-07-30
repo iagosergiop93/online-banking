@@ -34,6 +34,7 @@ import { SideMenuProfileComponent } from './pages/dashboard-page/side-menu-profi
 import { SideMenuOptionsComponent } from './pages/dashboard-page/side-menu-options/side-menu-options.component';
 import { HomePageComponent } from './pages/dashboard-page/home-page/home-page.component';
 import { MakeTransactionPageComponent } from './pages/dashboard-page/make-transaction-page/make-transaction-page.component';
+import { UserFeedbackComponent } from './dialogs/user-feedback/user-feedback.component';
 
 
 @NgModule({
@@ -54,7 +55,8 @@ import { MakeTransactionPageComponent } from './pages/dashboard-page/make-transa
     SideMenuProfileComponent,
     SideMenuOptionsComponent,
     HomePageComponent,
-    MakeTransactionPageComponent
+    MakeTransactionPageComponent,
+    UserFeedbackComponent
   ],
   imports: [
     HttpClientModule,

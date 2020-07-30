@@ -1,24 +1,38 @@
 import { Account, AccountType } from "../entities/Account";
-import { insertAccount, getAccountsByUserId } from "../daos/account-dao";
+import { insertAccount, getAccountsByUserId, linkUserToAccount } from "../daos/account-dao";
 import { createAccountFacade } from "../facades/account-facade";
-import { startTransaction, commitQuery, getPoolConnection } from "../daos/queryMaker";
+import { startTransaction, commitQuery, getPoolConnection, releaseConnection } from "../daos/queryMaker";
 import { Connection, PoolConnection } from "mysql";
+import { Logger } from "pino";
+import { getPinoLogger } from "../utils/logger";
 
 export class AccountService {
 
-    constructor() {}
+    logger: Logger;
 
-    async createAccount(type: AccountType): Promise<Account> {
+    constructor(logger: Logger) {
+        this.logger = logger;
+    }
+
+    async createAccount(type: AccountType, userId: number): Promise<Account> {
+        this.logger.debug("In accountService createAccount(" + type + ", " + userId + ")");
+
         let account = createAccountFacade(type);
         let conn: PoolConnection;
         try {
             conn = await startTransaction();
             account = await insertAccount(conn, account);
+            await linkUserToAccount(conn, userId, account.accountNumber);
             commitQuery(conn);
         } catch(e) {
+            console.log(e);
+            
+            if(!!conn) {
+                conn.rollback();
+            }
             throw e;
         } finally {
-            if(!!conn) conn.release();
+            if(!!conn) releaseConnection(conn);
         }
         return account;
     }
@@ -32,7 +46,7 @@ export class AccountService {
         } catch(e) {
             throw e;
         } finally {
-            if(!!conn) conn.release();
+            if(!!conn) releaseConnection(conn);
         }
         return accounts;
     }
@@ -51,7 +65,8 @@ export class AccountService {
     }
 
     Factory(): AccountService {
-        return new AccountService();
+        const logger = getPinoLogger();
+        return new AccountService(logger);
     }
 
 }

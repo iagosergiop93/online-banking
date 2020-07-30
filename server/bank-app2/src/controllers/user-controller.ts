@@ -14,8 +14,7 @@ export function userController(): Router {
     let router = Router();
 
     router.post("/register", async (req: Request, res: Response) => {
-        console.log("In /register handler")
-        console.log(userService);
+        req.log.info('In userController /register handler');
         try {
             // validate input (throws BadRequest if something is wrong)
             validateUserRegistration(req);
@@ -40,7 +39,7 @@ export function userController(): Router {
     });
 
     router.post("/auth", async (req: Request, res: Response) => {
-        console.log("In /auth handler");
+        req.log.info('In userController /register handler');
         try {
             // Get principal
             if(!res.locals.authorization) throw new BadRequest("Missing fields");
@@ -61,7 +60,7 @@ export function userController(): Router {
     });
 
     router.post("/login", async (req: Request, res: Response) => {
-        console.log("In /login handler");
+        req.log.info('In userController /register handler');
         try {
             // validate credentials
             validateCredentials(req);

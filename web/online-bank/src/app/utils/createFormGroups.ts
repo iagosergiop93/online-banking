@@ -43,3 +43,18 @@ export function createSimpleTransactionFormGroup() {
         ])
     });
 }
+
+export function createTransferTransactionFormGroup() {
+    return new FormGroup({
+        fromAcc: new FormControl('', [
+            Validators.required
+        ]),
+        toAcc: new FormControl('', [
+            Validators.required
+        ]),
+        value: new FormControl('', [
+            Validators.required,
+            Validators.min(0.1)
+        ])
+    });
+}

@@ -24,7 +24,7 @@ export function getInfo(): User {
 
 export function deleteToken(): void {
 	if (tokenExists()) {
-		localStorage.clear();
-		sessionStorage.clear();
+		localStorage.removeItem(TOKEN.name);
+		sessionStorage.removeItem(TOKEN.userInfo);
 	}
 }

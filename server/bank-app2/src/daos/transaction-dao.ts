@@ -4,19 +4,15 @@ import { Account } from "../entities/Account";
 import { executeQueryInsideTransaction } from "./queryMaker";
 import { ServerError } from "../exceptions/server-error";
 
-export async function insertTransaction(conn: PoolConnection, transaction: Transaction, account: Account): Promise<Account> {
+export async function insertTransaction(conn: PoolConnection, transaction: Transaction): Promise<Account> {
     try {
-        let sql = "UPDATE accounts SET balance = ? WHERE accountNumber = ?";
-        await executeQueryInsideTransaction(conn, sql, [account.balance, account.accountNumber]);
-        
-        sql = "INSERT INTO bank_transac (fromAcc, toAcc, type, value) VALUES(?, ?, ?, ?)";
+        let sql = "INSERT INTO bank_transac (fromAcc, toAcc, type, value) VALUES(?, ?, ?, ?)";
         await executeQueryInsideTransaction(conn, sql, [transaction.fromAcc, transaction.toAcc, transaction.type, transaction.value]);
 
     } catch (error) {
+        console.error(error);
         return Promise.reject(new ServerError("An unexpected error happened."));
     }
-
-    return account;
 }
 
 export async function getTransactionsByAccountNumber(conn: PoolConnection, accountNumber: string): Promise<Transaction[]> {
@@ -29,6 +25,7 @@ export async function getTransactionsByAccountNumber(conn: PoolConnection, accou
         let results = resultAndFields.shift();
         transactions = mapResultSetToTransactions(results);
     } catch (error) {
+        console.error(error);
         return Promise.reject(new ServerError("An unexpected error happened."));
     }
 
