@@ -1,0 +1,26 @@
+<app-balance #accounts></app-balance>
+
+<span class="section-title font-3">{{ transactionTypeDict[transactionType] }}</span>
+
+<form [formGroup]="transactionForm" (ngSubmit)="submitForm()">
+
+    <div class="flex-container">
+        <mat-form-field appearance="fill">
+            <mat-label>Choose the Account</mat-label>
+            <mat-select formControlName="account">
+                <mat-option *ngFor="let item of accountsArray" value="{{item.accountNumber}}">
+                    {{ accDict[item.type] }} - {{ item.accountNumber }}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+    
+        <mat-form-field appearance="legacy" class="transaction-mat-form-field">
+            <input matInput formControlName="value" placeholder="Value ($)" type="text">
+            <mat-error *ngIf="f.value.hasError('min') && !f.value.hasError('required')">Minimum value is $0.1</mat-error>
+        </mat-form-field>
+    </div>
+
+    <br>
+
+    <button mat-button type="submit" class="sub-button"> Make {{ transactionTypeDict[transactionType] }}</button>
+</form>

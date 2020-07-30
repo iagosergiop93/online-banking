@@ -4,9 +4,9 @@ export enum TransactionType {
 }
 
 export const TRANSACTION_DICT = {
-    1: "Deposit",
-    2: "Withdraw",
-    3: "Transfer"
+    1: 'Deposit',
+    2: 'Withdraw',
+    3: 'Transfer'
 }
 
 export class Transaction {
@@ -26,7 +26,7 @@ export class Transaction {
     }
 
     toString() {
-        return "id: " + this.id + ", toAcc: " + this.toAcc + ", type: " + this.type + ", value: " + this.value;
+        return 'id: ' + this.id + ', toAcc: ' + this.toAcc + ', type: ' + this.type + ', value: ' + this.value;
     }
 
 }

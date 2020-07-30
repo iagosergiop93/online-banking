@@ -1,0 +1,28 @@
+@import "../../../../styles.scss";
+
+form {
+    display: block;
+    padding: 3rem;
+}
+
+.flex-container {
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    flex-shrink: 0;
+    width: 30%;
+    min-width: 200px;
+
+    mat-form-field {
+        margin-bottom: 2rem;
+    }
+}
+
+.sub-button {
+    width: 30% !important;
+    max-width: 200px;
+    min-width: 100px;
+    display: block !important;
+    color: #ffffff;
+    background: $primary;
+}

@@ -9,6 +9,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTableModule } from '@angular/material/table';
+import { MatListModule } from '@angular/material/list';
+import { MatSelectModule } from '@angular/material/select';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
     declarations: [],
@@ -21,7 +24,10 @@ import { MatTableModule } from '@angular/material/table';
       MatIconModule,
       MatToolbarModule,
       MatTabsModule,
-      MatTableModule
+      MatTableModule,
+      MatListModule,
+      MatSelectModule,
+      MatDialogModule
     ]
   })
   export class MaterialModule { }

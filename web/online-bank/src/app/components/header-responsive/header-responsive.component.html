@@ -7,7 +7,7 @@
 			<span class="title">{{ title }}</span>
 		</div>
 		<div class="items-box">
-			<span *ngFor="let item of items" class="items2">{{ item.name }}</span>
+			<span *ngFor="let item of items" class="items2" (click)="headerLink(item)">{{ item.name }}</span>
 		</div>
 		<div *ngIf="toggle" class="toggle-items">
 			<mat-toolbar-row *ngFor="let item of items">

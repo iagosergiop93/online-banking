@@ -1,90 +1,88 @@
-import { DAO } from "./DAO-interface";
 import { Account } from "../entities/Account";
-import { Pool } from "mysql";
+import { Connection } from "mysql";
 import { ServerError } from "../exceptions/server-error";
 import { BadRequest } from "../exceptions/bad-request";
-import { getPool } from "../utils/db-config";
+import { executeQueryInsideTransaction } from "./queryMaker";
 
-export class AccountDao implements DAO {
-
-    pool: Pool = getPool();
-
-    constructor() {}
-
-    getAll(): Promise<Account[]> {
-        throw new Error("Method not implemented.");
+export async function getAccountByAccountNumber(conn: Connection, accNumber: string): Promise<Account> {
+    let account: Account;
+    try {
+        let sql = "SELECT * FROM accounts WHERE accountNumber = ?";
+        let resultsAndFields: any[] = await executeQueryInsideTransaction(conn, sql, [accNumber]);
+        let results = resultsAndFields.shift();
+        if(results.length == 0) throw new BadRequest("User accounts not found.");
+        account = mapResultSetToAccounts(results).shift();
+    } catch (error) {
+        console.error(error);
+        return Promise.reject(new ServerError("An unexpected error happened."));
     }
 
-    getById(id: number): Promise<Account> {
-        throw new Error("Method not implemented.");
-    }
+    return account;
+}
 
-    insert(obj: Account): Promise<Account> {
-        return new Promise((resolve, reject) => {
-            this.pool.getConnection((err, conn) => {
-                try {
-                    if(err) throw new ServerError("Error getting connection.");
-                    let sql = "INSERT INTO accounts (accountNumber, balance, type) VALUES(?, 0.0, ?)";
-                    conn.query(sql, [obj.accountNumber, obj.type], (err, results, fields) => {
-                        if(err) throw new ServerError("Failed while making the query.");
-                        obj.id = results.insertId;
-                        resolve(obj);
-                    });
-                } catch(e) {
-                    reject(e);
-                } finally {
-                    conn.release();
-                }
-            });
-        });
-    }
-
-    update(obj: Account): Promise<Account> {
-        throw new Error("Method not implemented.");
-    }
-
-    delete(id: number): Promise<Account> {
-        throw new Error("Method not implemented.");
-    }
-
-    getAccountsByUserId(userId: number): Promise<Account[]> {
-        console.log("In UserDao getting accounts by user id");
-        return new Promise((resolve, reject) => {
-            let accounts: Account[] = [];
-            this.pool.getConnection((err, conn) => {
-                try {
-                    if(err) throw new ServerError("Error getting connection.");
-                    let sql = "SELECT acc.id, acc.accountNumber, acc.balance, acc.type " +
+export async function getAccountsByUserId(conn: Connection, userId: number): Promise<Account[]> {
+    let accounts: Account[];
+    try {
+        let sql = "SELECT acc.id, acc.accountNumber, acc.balance, acc.type " +
                                 "FROM user_account AS us_acc " +
                                 "INNER JOIN accounts AS acc " +
                                 "ON us_acc.accNumber = acc.accountNumber " +
                                 "WHERE us_acc.userId = ?";
-                    conn.query(sql, [userId], (err, results, fields) => {
-                        if(err) throw new ServerError("Failed while making the query.");
-                        //console.log(results);
-                        if(results.length == 0) throw new BadRequest("User accounts not found.");
-                        accounts = this.mapResultSetToAccounts(results);
-                        resolve(accounts);
-                    });
-                } catch(e) {
-                    reject(e);
-                } finally {
-                    conn.release();
-                }
-            });
-        });
+        let resultsAndFields: any[] = await executeQueryInsideTransaction(conn, sql, [userId]);
+        let results = resultsAndFields.shift();
+        if(results.length == 0) throw new BadRequest("User accounts not found.");
+        accounts = mapResultSetToAccounts(results);
+    } catch (error) {
+        console.error(error);
+        return Promise.reject(new ServerError("An unexpected error happened."));
     }
 
-    private mapResultSetToAccounts(results: any[]) {
-        let accounts = results.map(item => {
-            if(item.id == undefined || item.balance == undefined || item.type == undefined) throw new ServerError("Invalid account found in Database");
-            return new Account(item.id, item.accountNumber, item.balance, item.type, item._createdAt, item._updatedAt);
-        });
-        return accounts;
+    return accounts;
+}
+
+export async function insertAccount(conn: Connection, account: Account): Promise<Account> {
+    try {
+        let sql = "INSERT INTO accounts (accountNumber, balance, type) VALUES(?, 0.0, ?)";
+        let resultsAndFields: any[] = await executeQueryInsideTransaction(conn, sql, [account.accountNumber, account.type]);
+        let results = resultsAndFields.shift();
+        account.id = results.insertId;
+    } catch (error) {
+        console.error(error);
+        return Promise.reject(new ServerError("An unexpected error happened."));
     }
 
-    Factory() {
-        return new AccountDao();
+    return account;
+}
+
+export async function updateAccount(conn: Connection, account: Account): Promise<Account> {
+    try {
+        let sql = "UPDATE accounts SET balance = ? WHERE accountNumber = ?";
+        await executeQueryInsideTransaction(conn, sql, [account.balance, account.accountNumber]);
+        
+    } catch (error) {
+        console.error(error);
+        return Promise.reject(new ServerError("An unexpected error happened."));
     }
 
+    return account;
+}
+
+export async function linkUserToAccount(conn: Connection, userId: number, accNumber: string): Promise<void> {
+    try {
+        let sql = "INSERT INTO user_account VALUES(?, ?)";
+        let resultsAndFields: any[] = await executeQueryInsideTransaction(conn, sql, [userId, accNumber]);
+    } catch (error) {
+        console.error(error);
+        return Promise.reject(new ServerError("An unexpected error happened."));
+    }
+}
+
+function mapResultSetToAccounts(results: any[]) {
+    let accounts = results.map(item => {
+        if(item.id == undefined || item.balance == undefined || item.type == undefined) {
+            throw new ServerError("Invalid account found in Database");
+        }
+        return new Account(item.id, item.accountNumber, parseFloat(item.balance), item.type, item._createdAt, item._updatedAt);
+    });
+    return accounts;
 }

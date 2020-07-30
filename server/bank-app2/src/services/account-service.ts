@@ -1,32 +1,52 @@
 import { Account, AccountType } from "../entities/Account";
-import { AccountDao } from "../daos/account-dao";
-import { createAccountUUID } from "../utils/randomNumGen";
+import { insertAccount, getAccountsByUserId, linkUserToAccount } from "../daos/account-dao";
+import { createAccountFacade } from "../facades/account-facade";
+import { startTransaction, commitQuery, getPoolConnection, releaseConnection } from "../daos/queryMaker";
+import { Connection, PoolConnection } from "mysql";
+import { Logger } from "pino";
+import { getPinoLogger } from "../utils/logger";
 
 export class AccountService {
 
-    private accountDao: AccountDao;
+    logger: Logger;
 
-    constructor(accountDao: AccountDao) {
-        this.accountDao = accountDao;
+    constructor(logger: Logger) {
+        this.logger = logger;
     }
 
-    async createAccount(userId: number, type: AccountType): Promise<Account> {
-        let accNumber = createAccountUUID();
-        let account = new Account(0, accNumber, 0.0, type);
+    async createAccount(type: AccountType, userId: number): Promise<Account> {
+        this.logger.debug("In accountService createAccount(" + type + ", " + userId + ")");
+
+        let account = createAccountFacade(type);
+        let conn: PoolConnection;
         try {
-            account = await this.accountDao.insert(account);
+            conn = await startTransaction();
+            account = await insertAccount(conn, account);
+            await linkUserToAccount(conn, userId, account.accountNumber);
+            commitQuery(conn);
         } catch(e) {
+            console.log(e);
+            
+            if(!!conn) {
+                conn.rollback();
+            }
             throw e;
+        } finally {
+            if(!!conn) releaseConnection(conn);
         }
         return account;
     }
 
     async getAccountsByUserId(id: number): Promise<Account[]> {
         let accounts: Account[] = [];
+        let conn: PoolConnection;
         try {
-            accounts = await this.accountDao.getAccountsByUserId(id);
+            conn = await getPoolConnection();
+            accounts = await getAccountsByUserId(conn, id);
         } catch(e) {
             throw e;
+        } finally {
+            if(!!conn) releaseConnection(conn);
         }
         return accounts;
     }
@@ -45,8 +65,8 @@ export class AccountService {
     }
 
     Factory(): AccountService {
-        const accountDao = AccountDao.prototype.Factory();
-        return new AccountService(accountDao);
+        const logger = getPinoLogger();
+        return new AccountService(logger);
     }
 
 }

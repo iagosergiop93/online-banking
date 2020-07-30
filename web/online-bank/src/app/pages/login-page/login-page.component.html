@@ -1,23 +1,13 @@
 <app-header-responsive></app-header-responsive>
 
-<div class="login-container page-content">
+<div class="login-container">
 
-	<span class="login-title">Login</span>
+	<app-signinform *ngIf="page == 'signin'"></app-signinform>
 
-	<form [formGroup]="loginForm" (ngSubmit)="submitForm()">
-		<mat-form-field appearance="legacy">
-			<input matInput formControlName="email" placeholder="Email" type="email">
-			<mat-error *ngIf="f.email.hasError('email') && !f.email.hasError('required')">Invalid email</mat-error>
-		</mat-form-field>
-		
-		<mat-form-field appearance="legacy">
-			<input matInput formControlName="passwd" placeholder="Password" type="password">
-			<mat-error *ngIf="f.passwd.hasError('required')">Invalid Password</mat-error>
-		</mat-form-field>
-	
-		<br>
-	
-		<button mat-button type="submit">Login</button>
-	</form>
+	<app-signupform *ngIf="page == 'signup'"></app-signupform>
+
+	<div class="login-links-box">
+		<span *ngFor="let item of links" (click)="goTo(item.path)">{{ item.text }}</span>
+	</div>
 
 </div>

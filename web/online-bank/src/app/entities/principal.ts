@@ -19,3 +19,17 @@ export class Principal {
 	}
 	
 }
+
+export class RegisterUserForm {
+	firstName: string;
+	lastName: string;
+	email: string;
+	passwd: string;
+
+	constructor(firstName: string, lastName: string, email: string, passwd: string) {
+		this.email = email;
+		this.passwd = passwd;
+		this.firstName = firstName;
+		this.lastName = lastName;
+	}
+}

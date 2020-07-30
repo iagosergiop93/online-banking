@@ -16,8 +16,8 @@ export class AuthGuard implements CanActivate {
 	next: ActivatedRouteSnapshot,
 	state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
 
-		if(state.url.match(/^[a-zA-Z\:\d\/]*home\/*/)) {
-			if(!(tokenExists() && !!getInfo())) {
+		if (!!state.url.match(/^[a-zA-Z\:\d\/]*dashboard\/*/)) {
+			if (!(tokenExists() && !!getInfo())) {
 				return this.router.parseUrl('/login');
 			}
 		}

@@ -11,15 +11,25 @@ export function accountController() {
 
     router.use(checkForToken);
 
-    router.post("/", (req: Request, res: Response) => {
-        
+    router.post("/type/:type/user/:id", async (req: Request, res: Response) => {
+        req.log.info('In accountController /accounts/type/:type/user/:id');
+        try {
+            const principal: Principal = JSON.parse(res.locals.authorization.data);
+            const id = parseInt(req.params["id"]);
+            const type = parseInt(req.params["type"]);
+            if(principal.id !== id) throw new BadRequest("Unauthorized user");
+            let account = await accountService.createAccount(type, id);
+            res.status(201).send(account);
+        } catch (e) {
+            res.status(e.status).send(e);
+        }
     });
 
     router.get("/user/:id", async (req: Request, res: Response) => {
-        console.log("In /account/user/id")
+        req.log.info('In accountController /accounts/user/:id');
         try {
-            let principal: Principal = JSON.parse(res.locals.authorization.data);
-            let id = parseInt(req.params["id"]);
+            const principal: Principal = JSON.parse(res.locals.authorization.data);
+            const id = parseInt(req.params["id"]);
             if(principal.id !== id) throw new BadRequest("Unauthorized user");
             let accounts = await accountService.getAccountsByUserId(principal.id);
             res.status(200).send(accounts);

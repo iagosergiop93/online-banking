@@ -1,81 +1,127 @@
 import { Transaction, TransactionType } from "../entities/Transaction";
 import { Principal } from "../entities/Principal";
-import { AccountDao } from "../daos/account-dao";
-import { TransactionDao } from "../daos/transaction-dao";
+import { getAccountsByUserId, getAccountByAccountNumber, updateAccount } from "../daos/account-dao";
 import { Account } from "../entities/Account";
 import { BadRequest } from "../exceptions/bad-request";
+import { startTransaction, getPoolConnection, commitQuery, releaseConnection } from "../daos/queryMaker";
+import { getTransactionsByAccountNumber, insertTransaction } from "../daos/transaction-dao";
+import { PoolConnection } from "mysql";
+import { Logger } from "pino";
+import { getPinoLogger } from "../utils/logger";
 
 export class TransactionService {
 
-    accountDao: AccountDao;
-    transactionDao: TransactionDao;
+    logger: Logger;
 
-    constructor(accountDao: AccountDao, transactionDao: TransactionDao) {
-        this.accountDao = accountDao;
-        this.transactionDao = transactionDao;
+    constructor(logger: Logger) {
+        this.logger = logger;
     }
 
     async getTransactionsByAccountNumber(accountNumber: string): Promise<Transaction[]> {
-        let transactions: Transaction[] = []
+        this.logger.debug("In transactionService getByAccountNumber(" + accountNumber + ")");
+
+        let transactions: Transaction[];
+        let conn: PoolConnection;
         try {
-            transactions = await this.transactionDao.getByAccountNumber(accountNumber);
+            conn = await getPoolConnection();
+            transactions = await getTransactionsByAccountNumber(conn, accountNumber);
         } catch(e) {
             throw e;
+        } finally {
+            if(!!conn) releaseConnection(conn);
         }
 
         return transactions;
     }
 
     async simpleTransaction(transaction: Transaction, principal: Principal): Promise<boolean> {
-        let accounts: Account[] = null;
+        this.logger.debug("In transactionService simpleTransaction(" + transaction + ", " +  principal + ")");
 
+        let conn: PoolConnection;
         try {
-            // Check if account belongs to user who is making the transaction
-            accounts = await this.accountDao.getAccountsByUserId(principal.id);
-            let account = accounts.filter(acc => {
-                return transaction.toAcc == acc.accountNumber;
-            }).pop();
-            if(!account) throw new BadRequest("Invalid Request");
-            // Make the deposit
-            account = this.processTransaction(transaction, account);
-            account = await this.transactionDao.insert(transaction, account);
+            conn = await startTransaction();
+            let account = await this.checkIfAccountBelongToUser(conn, principal.id, transaction.toAcc);
+            // Process transaction
+            account = this.processSimpleTransaction(transaction, account);
+            account = await updateAccount(conn, account);
+            await insertTransaction(conn, transaction);
+            commitQuery(conn);
+
         } catch(e) {
+            if(!!conn) {
+                conn.rollback();
+            }
             throw e;
+        } finally {
+            if(!!conn) releaseConnection(conn);;
         }
 
         return true;
     }
 
     async transfer(transaction: Transaction, principal: Principal): Promise<boolean> {
-        
+        this.logger.debug("In transactionService simpleTransaction(" + transaction + ", " +  principal + ")");
+        let conn: PoolConnection;
+        try {
+            conn = await startTransaction();
+            let fromAcc = await this.checkIfAccountBelongToUser(conn, principal.id, transaction.fromAcc);
+            let toAcc = await getAccountByAccountNumber(conn, transaction.toAcc);
+            this.processTransferTransaction(transaction, fromAcc, toAcc);
+            fromAcc = await updateAccount(conn, fromAcc);
+            toAcc = await updateAccount(conn, toAcc);
+            await insertTransaction(conn, transaction);
+            commitQuery(conn);
+        } catch(e) {
+            if(!!conn) {
+                conn.rollback();
+            }
+            throw e;
+        } finally {
+            if(!!conn) releaseConnection(conn);
+        }
         
         return true;
     }
 
-    private processTransaction(transaction: Transaction, account: Account) {
-        console.log("Process transaction");
-        console.log(transaction.toString());
-        
+    private async checkIfAccountBelongToUser(conn: PoolConnection, userId: number, accNumber: string): Promise<Account> {
+        let account;
+        try {
+            let accounts = await getAccountsByUserId(conn, userId);
+            account = accounts.filter(acc => {
+                return accNumber == acc.accountNumber;
+            }).pop();
+            if(!account) throw new BadRequest("Invalid Request");
+        } catch(e) {
+            throw e;
+        }
+
+        return account;
+    }
+
+    private processSimpleTransaction(transaction: Transaction, account: Account) {
         switch(transaction.type) {
             case TransactionType.DEPOSIT:
-                console.log("deposit");
                 account.balance = account.balance + transaction.value;
                 break;
             case TransactionType.WITHDRAW:
                 account.balance -= transaction.value;
                 break;
             default:
-                throw new BadRequest("Invalid request.");
+                throw new BadRequest("Invalid request");
         }
-        console.log(account.toString());
+
         return account;
     }
 
-    Factory(): TransactionService {
-        const accountDao: AccountDao = AccountDao.prototype.Factory();
-        const transactionDao: TransactionDao = TransactionDao.prototype.Factory();
+    private processTransferTransaction(transaction: Transaction, fromAcc: Account, toAcc: Account) {
+        const value = transaction.value;
+        fromAcc.balance -= value;
+        toAcc.balance += value;
+    }
 
-        return new TransactionService(accountDao, transactionDao);
+    Factory(): TransactionService {
+        const logger = getPinoLogger();
+        return new TransactionService(logger);
     }
 
 }

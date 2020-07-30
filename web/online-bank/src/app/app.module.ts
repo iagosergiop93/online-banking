@@ -10,6 +10,9 @@ import { MaterialModule } from './material/material.module';
 // Guards
 import { AuthGuard } from './guards/auth.guard';
 
+// Pipes
+import { CustomDatePipe } from './pipes/custom-date.pipe';
+
 // Pages
 import { LandingPageComponent } from './pages/landing-page/landing-page.component';
 import { LoginPageComponent } from './pages/login-page/login-page.component';
@@ -19,12 +22,19 @@ import { DashboardPageComponent } from './pages/dashboard-page/dashboard-page.co
 import { httpInterceptorProviders } from './interceptors/index';
 
 // Components
-import { HeaderResponsiveComponent } from "./components/header-responsive/header-responsive.component";
-import { SimpleLineChartComponent } from "./components/charts/simple-line-chart/simple-line-chart.component";
+import { HeaderResponsiveComponent } from './components/header-responsive/header-responsive.component';
+import { SimpleLineChartComponent } from './components/charts/simple-line-chart/simple-line-chart.component';
 import { FooterResponsiveComponent } from './components/footer-responsive/footer-responsive.component';
 import { SummaryComponent } from './pages/dashboard-page/summary/summary.component';
 import { BalanceComponent } from './pages/dashboard-page/balance/balance.component';
 import { TransactionHistoryComponent } from './pages/dashboard-page/transaction-history/transaction-history.component';
+import { SigninformComponent } from './pages/login-page/signinform/signinform.component';
+import { SignupformComponent } from './pages/login-page/signupform/signupform.component';
+import { SideMenuProfileComponent } from './pages/dashboard-page/side-menu-profile/side-menu-profile.component';
+import { SideMenuOptionsComponent } from './pages/dashboard-page/side-menu-options/side-menu-options.component';
+import { HomePageComponent } from './pages/dashboard-page/home-page/home-page.component';
+import { MakeTransactionPageComponent } from './pages/dashboard-page/make-transaction-page/make-transaction-page.component';
+import { UserFeedbackComponent } from './dialogs/user-feedback/user-feedback.component';
 
 
 @NgModule({
@@ -38,7 +48,15 @@ import { TransactionHistoryComponent } from './pages/dashboard-page/transaction-
     FooterResponsiveComponent,
     SummaryComponent,
     BalanceComponent,
-    TransactionHistoryComponent
+    TransactionHistoryComponent,
+    SigninformComponent,
+    SignupformComponent,
+    CustomDatePipe,
+    SideMenuProfileComponent,
+    SideMenuOptionsComponent,
+    HomePageComponent,
+    MakeTransactionPageComponent,
+    UserFeedbackComponent
   ],
   imports: [
     HttpClientModule,
