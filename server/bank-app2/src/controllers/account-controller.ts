@@ -21,6 +21,7 @@ export function accountController() {
             let account = await accountService.createAccount(type, id);
             res.status(201).send(account);
         } catch (e) {
+            req.log.error(e);
             res.status(e.status).send(e);
         }
     });
@@ -34,6 +35,7 @@ export function accountController() {
             let accounts = await accountService.getAccountsByUserId(principal.id);
             res.status(200).send(accounts);
         } catch(e) {
+            req.log.error(e);
             res.status(e.status).send(e);
         }
     });

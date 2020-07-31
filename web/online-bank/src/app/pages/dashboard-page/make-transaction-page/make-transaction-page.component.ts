@@ -1,14 +1,13 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormGroup } from '@angular/forms';
-import { createSimpleTransactionFormGroup } from '../../../utils/createFormGroups';
+import { createSimpleTransactionFormGroup, createTransferTransactionFormGroup } from '../../../utils/createFormGroups';
 import { BalanceComponent } from '../balance/balance.component';
 import { AccountsService } from 'src/app/services/accounts.service';
 import { Account, ACCOUNT_DICT } from 'src/app/entities/account';
 import { Transaction, TransactionType, TRANSACTION_DICT } from 'src/app/entities/transaction';
 import { TransactionsService } from 'src/app/services/transactions.service';
-import { MatDialog } from '@angular/material/dialog';
-import { UserFeedbackComponent } from '../../../dialogs/user-feedback/user-feedback.component';
+import { DialogService } from 'src/app/services/dialog.service';
 
 @Component({
   selector: 'app-make-transaction-page',
@@ -28,17 +27,9 @@ export class MakeTransactionPageComponent implements OnInit {
 	transactionType: TransactionType = TransactionType.DEPOSIT;
 	transactionTypeDict = TRANSACTION_DICT;
 
-	router: Router;
-	accountsService: AccountsService;
-	transactionService: TransactionsService;
-
-	constructor(router: Router, accountsService: AccountsService,
-		           public dialog: MatDialog,
-		           transactionService: TransactionsService) {
-		this.router = router;
-		this.accountsService = accountsService;
-		this.transactionService = transactionService;
-	}
+	constructor(public router: Router, public accountsService: AccountsService,
+		           public dialogService: DialogService,
+		           public transactionService: TransactionsService) {}
 
 	ngOnInit(): void {
 		this.getAccounts();
@@ -65,6 +56,7 @@ export class MakeTransactionPageComponent implements OnInit {
 		}
 		else if(this.router.url.indexOf('transfer') !== -1) {
 			this.transactionType = TransactionType.TRANSFER;
+			this.transactionForm = createTransferTransactionFormGroup();
 		}
 	}
 
@@ -80,20 +72,13 @@ export class MakeTransactionPageComponent implements OnInit {
 
 		this.transactionService.postTransaction(transaction).subscribe(
 			(res) => {
-				this.showFeedBackDialog(res.message);
+				this.dialogService.showFeedBackDialog(res.message);
 				this.router.navigate(['/dashboard']);
 			},
 			(err) => {
 				console.log(err);
 			}
 		);
-	}
-
-	showFeedBackDialog(msg: string) {
-		this.dialog.open(UserFeedbackComponent, {
-			width: '300px',
-			data: {text: msg}
-		});
 	}
 
 }

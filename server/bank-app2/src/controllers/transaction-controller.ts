@@ -26,6 +26,7 @@ export function transactionController() {
             let transactions = await transactionService.getTransactionsByAccountNumber(accNumber);
             res.status(200).send(transactions);
         } catch(e) {
+            req.log.error(e);
             res.status(e.status).send(e);
         }
     });
@@ -41,6 +42,7 @@ export function transactionController() {
             if(!worked) throw new ServerError("Something bad happened");
             res.status(200).send({ message: "The Transaction was successfully concluded" });
         } catch(e) {
+            req.log.error(e);
             res.status(e.status).send(e);
         }
     });
@@ -56,6 +58,7 @@ export function transactionController() {
             if(!worked) throw new ServerError("Something bad happened");
             res.status(200).send({ message: "The Transaction was successfully concluded" });
         } catch(e) {
+            req.log.error(e);
             res.status(e.status).send(e);
         }
     });
@@ -64,11 +67,13 @@ export function transactionController() {
 }
 
 function postTransactionMiddleware(req: Request, res: Response, next: NextFunction) {
+    req.log.info('In transactionController postTransactionMiddleware');
     try {
         validateTransaction(req);
         if(!res.locals.authorization) throw new BadRequest("User is not authenticated");
         next();
     } catch(e) {
+        req.log.error(e);
         res.status(e.status).send(e);
     }
 }

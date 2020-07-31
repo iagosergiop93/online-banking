@@ -27,6 +27,14 @@ $grey: #ebebeb;
     font-size: 1rem;
 }
 
+.font-5 {
+    font-size: 0.75rem;
+}
+
+.font-6 {
+    font-size: 0.5rem;
+}
+
 .color-1 {
     color: #ffffff;
 }
@@ -164,7 +172,6 @@ $login-internal-margin: 0 auto;
 
 .section-title {
     display: block;
-    line-height: rem;
     padding: 1rem;
     padding-bottom: 5px;
     width: 100%;

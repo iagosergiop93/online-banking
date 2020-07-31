@@ -8,13 +8,15 @@ form {
 .flex-container {
     display: flex;
     justify-content: flex-start;
-    flex-direction: column;
+    flex-direction: row;
     flex-shrink: 0;
-    width: 30%;
+    flex-wrap: wrap;
+    width: 70%;
     min-width: 200px;
 
     mat-form-field {
-        margin-bottom: 2rem;
+        margin-bottom: 1rem;
+        margin-right: 3rem;
     }
 }
 

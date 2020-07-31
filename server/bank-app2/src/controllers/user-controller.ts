@@ -32,7 +32,7 @@ export function userController(): Router {
             res.status(201).send(principal);
 
         } catch(e) {
-            console.log("Controller catch");
+            req.log.error(e);
             res.status(e.status).send(e.description);
         }
 
@@ -55,6 +55,7 @@ export function userController(): Router {
             res.status(200).send(principal);
 
         } catch(e) {
+            req.log.error(e);
             res.status(e.status).send(e);
         }
     });
@@ -76,8 +77,9 @@ export function userController(): Router {
             // send response
             res.setHeader("authorization", token);
             res.status(200).send(principal);
-
+            req.log.flush();
         } catch(e) {
+            req.log.error(e);
             res.status(e.status).send(e);
         }
     });

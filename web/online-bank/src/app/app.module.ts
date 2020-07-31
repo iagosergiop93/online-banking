@@ -35,6 +35,8 @@ import { SideMenuOptionsComponent } from './pages/dashboard-page/side-menu-optio
 import { HomePageComponent } from './pages/dashboard-page/home-page/home-page.component';
 import { MakeTransactionPageComponent } from './pages/dashboard-page/make-transaction-page/make-transaction-page.component';
 import { UserFeedbackComponent } from './dialogs/user-feedback/user-feedback.component';
+import { CreateAccountComponent } from './pages/create-account/create-account.component';
+import { ConfirmComponent } from './dialogs/confirm/confirm.component';
 
 
 @NgModule({
@@ -56,7 +58,9 @@ import { UserFeedbackComponent } from './dialogs/user-feedback/user-feedback.com
     SideMenuOptionsComponent,
     HomePageComponent,
     MakeTransactionPageComponent,
-    UserFeedbackComponent
+    UserFeedbackComponent,
+    CreateAccountComponent,
+    ConfirmComponent
   ],
   imports: [
     HttpClientModule,
