@@ -26,6 +26,7 @@ const routes: Routes = [
       { path: 'home', component: HomePageComponent },
       { path: 'deposit', component: MakeTransactionPageComponent },
       { path: 'withdraw', component: MakeTransactionPageComponent },
+      { path: 'transfer', component: MakeTransactionPageComponent },
       { path: '', redirectTo: 'home', pathMatch: 'full' }
     ]
   },

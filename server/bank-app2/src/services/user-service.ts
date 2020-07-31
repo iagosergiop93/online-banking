@@ -61,7 +61,6 @@ export class UserService {
 
             newUser.passwd = "";
         } catch(e) {
-            console.log("Service catch");
             throw e;
         } finally {
             if(!!conn) releaseConnection(conn);

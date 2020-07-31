@@ -46,7 +46,7 @@ export function createSimpleTransactionFormGroup() {
 
 export function createTransferTransactionFormGroup() {
     return new FormGroup({
-        fromAcc: new FormControl('', [
+        account: new FormControl('', [
             Validators.required
         ]),
         toAcc: new FormControl('', [
