@@ -5,6 +5,7 @@ import { UsersService } from 'src/app/services/users.service';
 import { FormGroup } from '@angular/forms';
 import { userLoggedInCallback } from '../login-util';
 import { createSignUpFormGroup } from 'src/app/utils/createFormGroups';
+import { DialogService } from 'src/app/services/dialog.service';
 
 @Component({
   selector: 'app-signupform',
@@ -14,17 +15,13 @@ import { createSignUpFormGroup } from 'src/app/utils/createFormGroups';
 export class SignupformComponent implements OnInit {
 
 	loginForm: FormGroup;
-	userService: UsersService;
-	router: Router;
 
 	get f() {
 		return this.loginForm.controls;
 	}
 
-	constructor(router: Router, userService: UsersService) {
-		this.router = router;
-		this.userService = userService;
-	}
+	constructor(public router: Router, public userService: UsersService,
+		           public dialogService: DialogService) {}
 
 	ngOnInit(): void {
 		this.loginForm = createSignUpFormGroup();
@@ -32,19 +29,18 @@ export class SignupformComponent implements OnInit {
 
 	submitForm() {
 		const result = Object.assign({}, this.loginForm.value);
-		let registerUserForm = new RegisterUserForm(result.firstName, result.lastName, result.email, result.passwd);
-		
+		const registerUserForm = new RegisterUserForm(result.firstName, result.lastName, result.email, result.passwd);
+
 		// Make the request
 		this.userService.register(registerUserForm).subscribe(
 			(res) => {
 				userLoggedInCallback(this.router);
 			},
 			(err) => {
-				console.log(err);
+				this.dialogService.showFeedBackDialog(err.description);
 			}
 		);
 
-		this.loginForm.reset();		
 	}
 
 }

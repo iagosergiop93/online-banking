@@ -6,6 +6,7 @@ import { AccountsService } from 'src/app/services/accounts.service';
 import { TransactionsService } from 'src/app/services/transactions.service';
 import { AccountType, Account } from 'src/app/entities/account';
 import { Transaction } from 'src/app/entities/transaction';
+import { DialogService } from 'src/app/services/dialog.service';
 
 @Component({
   selector: 'app-home-page',
@@ -18,13 +19,9 @@ export class HomePageComponent implements OnInit, AfterViewInit, OnDestroy {
 	@ViewChild('balances') balances: BalanceComponent;
 	@ViewChild('transactions') transactionHistory: TransactionHistoryComponent;
 
-	accountsService: AccountsService;
-	transactionsService: TransactionsService;
-
-	constructor(accountsService: AccountsService, transactionsService: TransactionsService) {
-		this.accountsService = accountsService;
-		this.transactionsService = transactionsService;
-	}
+	constructor(public accountsService: AccountsService,
+		           public dialogService: DialogService,
+		           public transactionsService: TransactionsService) {}
 
 	ngOnInit(): void {}
 
@@ -45,6 +42,9 @@ export class HomePageComponent implements OnInit, AfterViewInit, OnDestroy {
 				});
 
 				this.summary.createAccountsDoughnutChart();
+			},
+			(err) => {
+				this.dialogService.showFeedBackDialog(err.description);
 			}
 		);
 	}
@@ -54,6 +54,9 @@ export class HomePageComponent implements OnInit, AfterViewInit, OnDestroy {
 			(transactions: Transaction[]) => {
 				this.transactionHistory.AccountDictTransactionArray[accountType] = transactions;
 				this.summary.AccountDictTransactionArray[accountType] = transactions;
+			},
+			(err) => {
+				this.dialogService.showFeedBackDialog(err.description);
 			}
 		)
 	}

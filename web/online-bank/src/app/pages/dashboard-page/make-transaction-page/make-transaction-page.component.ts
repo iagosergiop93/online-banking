@@ -76,7 +76,7 @@ export class MakeTransactionPageComponent implements OnInit {
 				this.router.navigate(['/dashboard']);
 			},
 			(err) => {
-				console.log(err);
+				this.dialogService.showFeedBackDialog(err.description);
 			}
 		);
 	}
