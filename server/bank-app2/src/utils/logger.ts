@@ -7,10 +7,11 @@ export function getPinoLogger() {
 	const flagValue = inputParser('log-level=');
 	const logLevel = !!flagValue ? flagValue : 'info';
 
-	PINO_LOGGER = pino({ level: logLevel, prettyPrint: true }, pino.destination({
+	// { level: logLevel, prettyPrint: true },
+	PINO_LOGGER = pino( pino.destination({
 		dest: './logs/',
 		minLength: 1024,
-		sync: false
+		sync: false,
 	}));
 
 	return PINO_LOGGER;

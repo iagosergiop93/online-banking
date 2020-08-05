@@ -119,8 +119,8 @@ export class TransactionService {
         toAcc.balance += value;
     }
 
-    Factory(): TransactionService {
-        const logger = getPinoLogger();
+    Factory(log?: Logger): TransactionService {
+        const logger = !!log ? log : getPinoLogger();
         return new TransactionService(logger);
     }
 

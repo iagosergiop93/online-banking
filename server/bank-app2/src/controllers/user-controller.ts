@@ -1,4 +1,4 @@
-import { Router, Request, Response } from "express";
+import { Router, Request, Response, NextFunction } from "express";
 import { UserService } from "../services/user-service";
 import { validateUserRegistration, validateCredentials } from "../utils/validator";
 import { User } from "../entities/User";
@@ -12,6 +12,11 @@ export function userController(): Router {
     
     let userService: UserService = UserService.prototype.Factory();
     let router = Router();
+
+    router.use((req: Request, res: Response, next: NextFunction) => {
+        userService.logger = req.log;
+        next();
+    })
 
     router.post("/register", async (req: Request, res: Response) => {
         req.log.info('In userController /register handler');
