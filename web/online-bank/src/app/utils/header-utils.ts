@@ -1,5 +1,11 @@
+const LOGIN = [
+    { name: 'Home', path: '/', focusElement: '' },
+    { name: 'Sign in', path: 'login/signin', focusElement: '' },
+    { name: 'Sign up', path: 'login/signup', focusElement: '' }
+];
+
 const DASHBOARD = [
-    { name: 'Profile', path: '', focusElement: '' },
+    { name: 'Profile', path: 'not-impl', focusElement: '' },
     { name: 'Sign out', path: '', focusElement: '' }
 ];
 
@@ -17,6 +23,8 @@ export function getHeaderItems(page) {
             return DASHBOARD;
         case 'landing-page':
             return LANDING_PAGE;
+        case 'login':
+            return LOGIN;
         default:
             return [];
     }

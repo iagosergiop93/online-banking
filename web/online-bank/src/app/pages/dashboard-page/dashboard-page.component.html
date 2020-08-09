@@ -1,8 +1,7 @@
-<app-header-responsive [page]="'dashboard'"></app-header-responsive>
+<app-header-responsive [disableBuiltToggle]="true" (toggleEvent)="sidenav.toggle()" [page]="'dashboard'"></app-header-responsive>
 
 <mat-sidenav-container>
-    <mat-sidenav #sidenav [mode]="'side'" opened>
-        <!-- <p><button mat-button (click)="sidenav.toggle()">Toggle</button></p> -->
+    <mat-sidenav #sidenav [mode]="isMobile ? 'over' : 'side'" opened>
         <app-side-menu-profile></app-side-menu-profile>
         <app-side-menu-options></app-side-menu-options>
 
@@ -12,7 +11,9 @@
 
     <mat-sidenav-content>
         
-        <router-outlet></router-outlet>
+        <main [@routeAnimations]="prepareRoute(outlet)">
+            <router-outlet #outlet="outlet"></router-outlet>
+        </main>
 
     </mat-sidenav-content>
     

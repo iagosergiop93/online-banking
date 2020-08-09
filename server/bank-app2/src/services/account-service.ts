@@ -64,8 +64,8 @@ export class AccountService {
         return match;
     }
 
-    Factory(): AccountService {
-        const logger = getPinoLogger();
+    Factory(log?: Logger): AccountService {
+        const logger = !!log ? log : getPinoLogger();
         return new AccountService(logger);
     }
 

@@ -33,6 +33,6 @@ export async function getTransactionsByAccountNumber(conn: PoolConnection, accou
 }
 
 export function mapResultSetToTransactions(results: any[]) {
-    console.log(results);
+    // console.log(results);
     return results;
 }

@@ -69,8 +69,8 @@ export class UserService {
         return newUser;
     }
 
-    Factory() {
-        const logger = getPinoLogger();
+    Factory(log?: Logger): UserService {
+        const logger = !!log ? log : getPinoLogger();
         return new UserService(logger);
     }
 }

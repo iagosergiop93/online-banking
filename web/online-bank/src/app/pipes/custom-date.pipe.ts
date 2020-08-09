@@ -7,17 +7,11 @@ import { DatePipe } from '@angular/common';
 export class CustomDatePipe extends DatePipe implements PipeTransform {
 
 	transform(value: string, ...args: string[]) {
-		let hours = new Date(value).getTimezoneOffset() / 60;
-		let offset = hours < 0 ? '+' : '-';
-		hours = Math.abs(hours);
-		if (hours < 10) {
-			offset += '0' + hours.toString() + '00';
-		}
-		else {
-			offset += hours.toString() + '00';
-		}
+		const date = new Date(value);
+		const minutes = new Date().getTimezoneOffset();
+		date.setTime(date.getTime() - minutes * 60 * 1000);
 
-		return super.transform(value, args[0], offset);
+		return super.transform(date, ...args);
 	}
 
 }
