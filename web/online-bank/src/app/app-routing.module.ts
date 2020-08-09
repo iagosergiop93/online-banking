@@ -24,9 +24,9 @@ const routes: Routes = [
   { path: 'dashboard', component: DashboardPageComponent, canActivate: [AuthGuard],
     children: [
       { path: 'home', component: HomePageComponent },
-      { path: 'deposit', component: MakeTransactionPageComponent },
-      { path: 'withdraw', component: MakeTransactionPageComponent },
-      { path: 'transfer', component: MakeTransactionPageComponent },
+      { path: 'deposit', component: MakeTransactionPageComponent, data: { animation: 'deposit' } },
+      { path: 'withdraw', component: MakeTransactionPageComponent, data: { animation: 'withdraw' } },
+      { path: 'transfer', component: MakeTransactionPageComponent, data: { animation: 'transfer' } },
       { path: '', redirectTo: 'home', pathMatch: 'full' }
     ]
   },

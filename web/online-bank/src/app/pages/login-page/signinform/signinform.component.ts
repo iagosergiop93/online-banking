@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Credentials } from 'src/app/entities/credentials';
 import { createSignInFormGroup } from 'src/app/utils/createFormGroups';
 import { Router } from '@angular/router';
@@ -14,6 +14,7 @@ import { DialogService } from 'src/app/services/dialog.service';
 })
 export class SigninformComponent implements OnInit {
 
+	@ViewChild('submitbtn') submitbtn: HTMLButtonElement;
 	loginForm: FormGroup;
 
 	get f() {
@@ -29,6 +30,7 @@ export class SigninformComponent implements OnInit {
 
 
 	submitForm() {
+		this.submitbtn.disabled = true;
 		const result = Object.assign({}, this.loginForm.value);
 		const cred = new Credentials(result.email, result.passwd);
 
@@ -36,9 +38,12 @@ export class SigninformComponent implements OnInit {
 		this.userService.login(cred).subscribe(
 			(res) => {
 				userLoggedInCallback(this.router);
+				this.submitbtn.disabled = false;
 			},
 			(err) => {
-				this.dialogService.showFeedBackDialog(err.description);
+				const errorMsg = !!err.description ? err.description : 'Some error happened. Try again later';
+				this.dialogService.showFeedBackDialog(errorMsg);
+				this.submitbtn.disabled = false;
 			}
 		);
 	}

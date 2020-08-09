@@ -30,3 +30,20 @@ footer {
     }
 }
 
+@media(max-width: 800px) {
+
+    footer {
+        padding: 0.5rem 0;
+    }
+
+    .footer-box {
+        flex-direction: column;
+    }
+
+    span {
+        text-align: center;
+        display: block;
+        margin-top: 0.5rem;
+    }
+}
+

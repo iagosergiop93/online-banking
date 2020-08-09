@@ -15,6 +15,10 @@ mat-sidenav-container {
     mat-sidenav-content {
         overflow-x: hidden;
         overflow-y: hidden;
+
+        main {
+            position: relative;
+        }
     }
 
 }

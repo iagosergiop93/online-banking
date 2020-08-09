@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { RegisterUserForm } from 'src/app/entities/principal';
 import { Router } from '@angular/router';
 import { UsersService } from 'src/app/services/users.service';
@@ -14,6 +14,7 @@ import { DialogService } from 'src/app/services/dialog.service';
 })
 export class SignupformComponent implements OnInit {
 
+	@ViewChild('submitbtn') submitbtn: HTMLButtonElement;
 	loginForm: FormGroup;
 
 	get f() {
@@ -28,6 +29,7 @@ export class SignupformComponent implements OnInit {
 	}
 
 	submitForm() {
+		this.submitbtn.disabled = true;
 		const result = Object.assign({}, this.loginForm.value);
 		const registerUserForm = new RegisterUserForm(result.firstName, result.lastName, result.email, result.passwd);
 
@@ -35,9 +37,11 @@ export class SignupformComponent implements OnInit {
 		this.userService.register(registerUserForm).subscribe(
 			(res) => {
 				userLoggedInCallback(this.router);
+				this.submitbtn.disabled = false;
 			},
 			(err) => {
 				this.dialogService.showFeedBackDialog(err.description);
+				this.submitbtn.disabled = false;
 			}
 		);
 

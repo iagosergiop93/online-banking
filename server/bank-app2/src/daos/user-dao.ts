@@ -36,8 +36,6 @@ export async function getUserByEmail(conn: PoolConnection, email: string): Promi
 }
 
 function mapResultSetToUsers(results: any[]) {
-    console.log(results);
-    
     let users = results.map(item => {
         if(item.id == undefined || item.id == 0 || !item.firstName || !item.lastName || !item.email || !item.passwd || !item.role) throw new ServerError("Invalid user found in Database");
         return new User(item.id, item.firstName, item.lastName, item.email, item.passwd, item.role);

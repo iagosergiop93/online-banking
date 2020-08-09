@@ -1,4 +1,4 @@
-<app-header-responsive></app-header-responsive>
+<app-header-responsive [page]="'landing-page'"></app-header-responsive>
 
 <section class="box cover">
     <div class="page-content">
@@ -8,7 +8,7 @@
             <span class="font-1 mr-v-2 mobile">what is</span>
             <span class="font-1 mr-v-2 mobile">right for you</span>
             <span class="font-4 w-50">Let us guide your finances and take you where you want to go</span>
-            <button mat-raised-button color="primary">Create an Account</button>
+            <button mat-raised-button color="primary" [routerLink]="[ '/login/signup']">Create an Account</button>
         </div>
     </div>
 </section>
@@ -20,7 +20,7 @@
                 <span class="font-4 color-1">Checking offers</span>
                 <span class="font-2 color-1">Earn up to $800</span>
                 <span class="font-4 color-1">Open a new account with required activities and earn a cash bonus.</span>
-                <button class="btn-align-r" mat-raised-button>Learn more</button>
+                <button class="btn-align-r" mat-raised-button [routerLink]="[ '/login/signup']">Learn more</button>
             </div>
             <div class="div60">
                 <img src="../../../assets/pic9.jpg">
@@ -35,7 +35,7 @@
             <span class="font-4 color-2 align-c">Investing Account</span>
             <span class="font-2 color-2 align-c">Let your money to work for you</span>
             <span class="font-4 color-2 align-c">Open an investing account, monitor your earnings and let our specialists help you.</span>
-            <button class="btn-align-c" mat-raised-button color="primary">Learn more</button>
+            <button class="btn-align-c" mat-raised-button color="primary" [routerLink]="[ '/login/signup']">Learn more</button>
         </div>
     </div>
 </section>
@@ -50,7 +50,7 @@
                 <span class="font-4 color-1">Savings</span>
                 <span class="font-2 color-1">Achieve your Goals</span>
                 <span class="font-4 color-1">Open a savings account and earn up to 3% A.P.Y.</span>
-                <button class="btn-align-l" mat-raised-button>Learn more</button>
+                <button class="btn-align-l" mat-raised-button [routerLink]="[ '/login/signup']">Learn more</button>
             </div>
         </div>
     </div>
