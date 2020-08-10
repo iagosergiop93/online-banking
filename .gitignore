@@ -115,3 +115,4 @@ build/
 resources/
 *.sql
 pictures/
+deploy/
