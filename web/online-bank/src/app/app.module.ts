@@ -37,6 +37,7 @@ import { MakeTransactionPageComponent } from './pages/dashboard-page/make-transa
 import { UserFeedbackComponent } from './dialogs/user-feedback/user-feedback.component';
 import { CreateAccountComponent } from './pages/create-account/create-account.component';
 import { ConfirmComponent } from './dialogs/confirm/confirm.component';
+import { AccountTypeInfoComponent } from './components/account-type-info/account-type-info.component';
 
 
 @NgModule({
@@ -60,7 +61,8 @@ import { ConfirmComponent } from './dialogs/confirm/confirm.component';
     MakeTransactionPageComponent,
     UserFeedbackComponent,
     CreateAccountComponent,
-    ConfirmComponent
+    ConfirmComponent,
+    AccountTypeInfoComponent
   ],
   imports: [
     HttpClientModule,

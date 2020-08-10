@@ -10,7 +10,7 @@ export function createJwt(principal: Principal) : string {
 		data: JSON.stringify(principal),
 		exp: Math.floor(Date.now() / 1000) + config.expiration_seconds
 	}
-	console.log("payload", payload);
+	
 	let token;
 	try {
 		token = jwt.sign(payload, config.secret);

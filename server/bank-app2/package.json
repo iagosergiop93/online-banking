@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "ts-node src/index.ts",
-    "debug": "ts-node src/index.ts log-level=debug | pino-pretty | tee logs/log-all"
+    "debug": "ts-node src/index.ts log-level=debug | pino-pretty"
   },
   "author": "Iago",
   "license": "ISC",

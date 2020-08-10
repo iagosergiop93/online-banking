@@ -1,0 +1,18 @@
+<section class="content">
+    <div class="div60 account-desc">
+        <p class="font-3">{{ accDict[accountType] }}</p>
+        <p class="font-4">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce feugiat a orci sed ultrices. 
+            Suspendisse dignissim rhoncus mattis. Vestibulum ante ipsum primis in faucibus orci luctus et 
+            ultrices posuere cubilia curae; Ut in fringilla dolor. Mauris tristique rhoncus nisi, eu dictum 
+            est porttitor vel. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per 
+            inceptos himenaeos. Fusce finibus nisl in cursus semper. Mauris pretium tellus velit, eu iaculis 
+            tellus ornare in. Nam egestas elementum nibh non dignissim.
+        </p>
+    </div>
+    <div class="div40 btn-sec">
+        <button mat-raised-button color="primary" class="new-account" (click)="createAccount()" >
+            Create {{ accDict[accountType] }} Account
+        </button>
+    </div>
+</section>

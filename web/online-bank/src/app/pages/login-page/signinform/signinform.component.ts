@@ -6,6 +6,8 @@ import { UsersService } from 'src/app/services/users.service';
 import { FormGroup } from '@angular/forms';
 import { userLoggedInCallback } from '../login-util';
 import { DialogService } from 'src/app/services/dialog.service';
+import { error } from 'protractor';
+import { threadId } from 'worker_threads';
 
 @Component({
   selector: 'app-signinform',
@@ -25,9 +27,24 @@ export class SigninformComponent implements OnInit {
 		           public dialogService: DialogService) {}
 
 	ngOnInit(): void {
+		this.tryAutoLogin();
 		this.loginForm = createSignInFormGroup();
 	}
 
+	tryAutoLogin() {
+		try {
+			this.userService.auth().subscribe(
+				res => {
+					userLoggedInCallback(this.router);
+				},
+				error => {
+					this.dialogService.showFeedBackDialog(error.message);
+				}
+			);
+		} catch (error) {
+			console.log(error.message);
+		}
+	}
 
 	submitForm() {
 		this.submitbtn.disabled = true;

@@ -3,14 +3,14 @@ import pino from "pino";
 var PINO_LOGGER: pino.Logger;
 
 export function getPinoLogger() {
-	// if(!!PINO_LOGGER) return PINO_LOGGER;
+	if(!!PINO_LOGGER) return PINO_LOGGER;
 	const flagValue = inputParser('log-level=');
 	const logLevel = !!flagValue ? flagValue : 'info';
 
 	// { level: logLevel, prettyPrint: true },
 	PINO_LOGGER = pino( pino.destination({
-		dest: './logs/',
-		minLength: 1024,
+		dest: './logs/log',
+		minLength: 128,
 		sync: false,
 	}));
 

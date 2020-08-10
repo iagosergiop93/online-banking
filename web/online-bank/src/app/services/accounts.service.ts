@@ -4,7 +4,7 @@ import { User } from '../entities/user';
 import { userValidator, accountValidator } from '../utils/validator';
 import { HttpClient } from '@angular/common/http';
 import { API_URL } from 'src/environments/environment';
-import { Account } from '../entities/account';
+import { Account, AccountType } from '../entities/account';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
@@ -17,6 +17,22 @@ export class AccountsService {
 
 	constructor(http: HttpClient) {
 		this.http = http;
+	}
+
+	createAccount(type: AccountType): Observable<Account> {
+		try {
+			// Check token and Info existence
+			if(!tokenExists()) throw new Error('Unauthenticated User');
+			const principal: User = getInfo();
+			if(!userValidator(principal)) throw new Error('Invalid Credentials');
+
+			// Make request
+			const url = API_URL + '/accounts/type/' + type + '/user/' + principal.id;
+			return this.http.post<Account>(url, {});
+
+		} catch (error) {
+			throw error;
+		}
 	}
 
 	getAccountsInfo(): Observable<Account[]> {
