@@ -24,7 +24,7 @@ export function startTransaction(): Promise<PoolConnection> {
         getPoolConnection()
         .then((conn) => {
             conn.beginTransaction(err => {
-                if(err) throw new ServerError("Error beginning transaction.");
+                if(err) reject(new ServerError("Error beginning transaction."));
                 resolve(conn);
             });
         })
