@@ -18,9 +18,9 @@ export function AppRouter(app: Express) {
     app.use(authFilter);
 
     // Routing
-    app.use("/users", userController());
-    app.use("/accounts", accountController());
-    app.use("/transactions", transactionController());
-    app.use("/test", testController());
+    app.use("api/users", userController());
+    app.use("api/accounts", accountController());
+    app.use("api/transactions", transactionController());
+    app.use("api/test", testController());
 
 }
