@@ -29,3 +29,12 @@ mat-sidenav-container {
     margin: 0 auto;
     margin-top: 5rem;
 }
+
+@media(max-width: 800px) {
+    mat-sidenav-container {
+        mat-sidenav {
+            width: 80%;
+            max-width: 2000px;
+        }
+    }
+}

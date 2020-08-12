@@ -23,7 +23,6 @@ import { httpInterceptorProviders } from './interceptors/index';
 
 // Components
 import { HeaderResponsiveComponent } from './components/header-responsive/header-responsive.component';
-import { SimpleLineChartComponent } from './components/charts/simple-line-chart/simple-line-chart.component';
 import { FooterResponsiveComponent } from './components/footer-responsive/footer-responsive.component';
 import { SummaryComponent } from './pages/dashboard-page/summary/summary.component';
 import { BalanceComponent } from './pages/dashboard-page/balance/balance.component';
@@ -47,7 +46,6 @@ import { AccountTypeInfoComponent } from './components/account-type-info/account
     LoginPageComponent,
     DashboardPageComponent,
     HeaderResponsiveComponent,
-    SimpleLineChartComponent,
     FooterResponsiveComponent,
     SummaryComponent,
     BalanceComponent,

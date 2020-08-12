@@ -38,7 +38,7 @@ export function userController(): Router {
 
         } catch(e) {
             req.log.error(e);
-            res.status(e.status).send(e.description);
+            res.status(e.status).send(e);
         }
 
     });

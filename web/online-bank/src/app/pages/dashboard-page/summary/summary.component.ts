@@ -16,15 +16,25 @@ export class SummaryComponent implements OnInit {
 	doughnutChart: Chart;
 	lineChart: Chart;
 
+	showSummary = true;
+
 	constructor() { }
 
 	ngOnInit(): void {
 	}
 
 	createAccountsDoughnutChart() {
-		let doughnutData = this.accounts.map(item => item.balance);
-		let doughnutLabels = this.accounts.map(item => ACCOUNT_DICT[item.type]);
-		this.doughnutChart = createDoughnutChart(doughnutLabels, doughnutData, 'doughnutChart');
+		let doughnutData = this.accounts.map(item => {
+			if(item.balance === 0) return;
+			return item.balance;
+		});
+		if(doughnutData.length > 0 && !!doughnutData[0]) {
+			let doughnutLabels = this.accounts.map(item => ACCOUNT_DICT[item.type]);
+			this.doughnutChart = createDoughnutChart(doughnutLabels, doughnutData, 'doughnutChart');
+		}
+		else {
+			this.showSummary = false;
+		}
 	}
 
 	createLineChart() {

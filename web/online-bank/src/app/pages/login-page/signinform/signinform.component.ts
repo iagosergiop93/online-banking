@@ -6,8 +6,6 @@ import { UsersService } from 'src/app/services/users.service';
 import { FormGroup } from '@angular/forms';
 import { userLoggedInCallback } from '../login-util';
 import { DialogService } from 'src/app/services/dialog.service';
-import { error } from 'protractor';
-import { threadId } from 'worker_threads';
 
 @Component({
   selector: 'app-signinform',
@@ -58,7 +56,7 @@ export class SigninformComponent implements OnInit {
 				this.submitbtn.disabled = false;
 			},
 			(err) => {
-				const errorMsg = !!err.description ? err.description : 'Some error happened. Try again later';
+				const errorMsg = !!err.error.description ? err.error.description : 'Some error happened. Try again later';
 				this.dialogService.showFeedBackDialog(errorMsg);
 				this.submitbtn.disabled = false;
 			}

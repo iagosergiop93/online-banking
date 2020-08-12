@@ -32,3 +32,13 @@
 .account * {
     cursor: default;
 }
+
+@media(max-width: 800px) {
+    .flex-balance {
+        width: 100%;
+    }
+
+    .account {
+        margin: 0.5rem;
+    }
+}

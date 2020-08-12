@@ -1,4 +1,20 @@
 .summary-container {
     display: flex;
-    
+
+    .chart {
+        margin: 1rem;
+    }
+
+    .bar {
+        display: none;
+    }
+
+    .doughnut {
+        
+    }
+
+    .line {
+        display: none;
+    }
+
 }

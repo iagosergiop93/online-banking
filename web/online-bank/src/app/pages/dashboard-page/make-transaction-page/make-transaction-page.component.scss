@@ -21,10 +21,16 @@ form {
 }
 
 .sub-button {
-    width: 30% !important;
+    width: 30%;
     max-width: 200px;
     min-width: 100px;
     display: block !important;
     color: #ffffff;
     background: $primary;
+}
+
+@media(max-width: 800px) {
+    .sub-button {
+        width: 60%;
+    }
 }

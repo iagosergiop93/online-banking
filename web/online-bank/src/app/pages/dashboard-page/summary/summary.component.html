@@ -1,13 +1,13 @@
-<span class="section-title font-3">Summary</span>
+<span *ngIf="showSummary" class="section-title font-3">Summary</span>
 
-<div class="summary-container">
-    <div class="chart">
-        <canvas id="barChart" width="200" height="200"></canvas>
+<div *ngIf="showSummary" class="summary-container">
+    <div class="chart bar">
+        <canvas id="barChart" width="200" height="300"></canvas>
     </div>
-    <div class="chart">
+    <div class="chart doughnut">
         <canvas id="doughnutChart" width="300" height="300"></canvas>
     </div>
-    <div class="chart">
-        <canvas id="lineChart" width="200" height="200"></canvas>
+    <div class="chart line">
+        <canvas id="lineChart" width="200" height="300"></canvas>
     </div>
 </div>
