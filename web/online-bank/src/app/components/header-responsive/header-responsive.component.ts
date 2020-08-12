@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { getHeaderItems } from 'src/app/utils/header-utils';
 import { UsersService } from 'src/app/services/users.service';
 import { Router } from '@angular/router';
-import { ConfirmComponent } from 'src/app/dialogs/confirm/confirm.component';
+import { DialogService } from 'src/app/services/dialog.service';
 
 @Component({
   selector: 'app-header-responsive',
@@ -19,7 +19,7 @@ export class HeaderResponsiveComponent implements OnInit {
 	items = [];
 
 	constructor(public userService: UsersService,
-		           public dialog: ConfirmComponent,
+		           public dialog: DialogService,
 		           public router: Router) {}
 
 	ngOnInit() {
@@ -36,7 +36,7 @@ export class HeaderResponsiveComponent implements OnInit {
 			this.userService.logout();
 		}
 		else if(item.name === 'not-impl') {
-
+			this.dialog.showFeedBackDialog('This feature hasn\'t been implemented yet');
 		}
 		else if(!!item.path){
 			this.router.navigate([item.path]);

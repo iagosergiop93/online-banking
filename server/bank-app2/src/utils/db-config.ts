@@ -1,4 +1,4 @@
-import config from "../../resources/db-conn.json";
+import config from "../resources/db-conn.json";
 import mysql, { Pool } from "mysql";
 
 var SINGLE_POOL: Pool;

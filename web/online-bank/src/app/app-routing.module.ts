@@ -10,6 +10,7 @@ import { LoginPageComponent } from './pages/login-page/login-page.component';
 import { DashboardPageComponent } from './pages/dashboard-page/dashboard-page.component';
 import { HomePageComponent } from './pages/dashboard-page/home-page/home-page.component';
 import { MakeTransactionPageComponent } from './pages/dashboard-page/make-transaction-page/make-transaction-page.component';
+import { CreateAccountComponent } from './pages/create-account/create-account.component';
 
 const routes: Routes = [
   { path: '', component: LandingPageComponent },
@@ -27,9 +28,11 @@ const routes: Routes = [
       { path: 'deposit', component: MakeTransactionPageComponent, data: { animation: 'deposit' } },
       { path: 'withdraw', component: MakeTransactionPageComponent, data: { animation: 'withdraw' } },
       { path: 'transfer', component: MakeTransactionPageComponent, data: { animation: 'transfer' } },
+      { path: 'create-account', component: CreateAccountComponent, },
       { path: '', redirectTo: 'home', pathMatch: 'full' }
     ]
   },
+
   { path: '**', redirectTo: '', pathMatch: 'full'}
 ];
 

@@ -1,6 +1,6 @@
 <span class="section-title font-3">Accounts</span>
 <div class="flex-balance">
-    <div *ngFor="let item of accounts" class="account">
+    <div *ngFor="let item of accounts" class="account" matTooltip="Account {{item.accountNumber}}">
         <span class="value font-3">${{ item.balance }}</span>
         <div class="acc-type font-4">{{ dict[item.type] }} Account</div>
     </div>

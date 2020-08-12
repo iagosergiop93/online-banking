@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import { Principal } from "../entities/Principal";
-import * as config from "../../resources/jwtconfig.json";
+import * as config from "../resources/jwtconfig.json";
 import { BadRequest } from "../exceptions/bad-request";
 import { ServerError } from "../exceptions/server-error";
 
@@ -10,7 +10,7 @@ export function createJwt(principal: Principal) : string {
 		data: JSON.stringify(principal),
 		exp: Math.floor(Date.now() / 1000) + config.expiration_seconds
 	}
-	console.log("payload", payload);
+	
 	let token;
 	try {
 		token = jwt.sign(payload, config.secret);
