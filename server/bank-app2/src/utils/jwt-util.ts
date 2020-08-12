@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import { Principal } from "../entities/Principal";
-import * as config from "../../resources/jwtconfig.json";
+import * as config from "../resources/jwtconfig.json";
 import { BadRequest } from "../exceptions/bad-request";
 import { ServerError } from "../exceptions/server-error";
 

@@ -2,7 +2,7 @@ import express from "express";
 import bodyParser from "body-parser";
 import helmet from "helmet";
 import cors from "cors";
-import corsConfig from "../resources/cors-config.json";
+import corsConfig from "./resources/cors-config.json";
 import pinoHttp from "pino-http";
 
 import { AppRouter } from "./routing";
@@ -17,9 +17,6 @@ app.use(bodyParser.json());
 app.use(helmet());
 app.use(cors(corsConfig));
 app.use(logger)
-
-// Initialize Container
-//let container = initializeContainer();
 
 AppRouter(app);
 
