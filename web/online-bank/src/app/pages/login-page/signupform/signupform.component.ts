@@ -40,8 +40,8 @@ export class SignupformComponent implements OnInit {
 				this.submitbtn.disabled = false;
 			},
 			(err) => {
-				const errorMsg = !!err.description ? err.description : 'Some error happened. Try again later';
-				this.dialogService.showFeedBackDialog(err.description);
+				const errorMsg = !!err.error ? err.error.description : 'Some error happened. Try again later';
+				this.dialogService.showFeedBackDialog('Some error happened. Try again later');
 				this.submitbtn.disabled = false;
 			}
 		);

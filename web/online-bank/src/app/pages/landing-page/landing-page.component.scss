@@ -39,21 +39,8 @@
 
 .box {
     background: #ffffff;
-    // height: 340px;
     width: 100vw;
-    position: relative;
     margin: 1.5rem 0;
-
-    .img-box {
-        width: 100%;
-        display: inline-block;
-        position: relative;
-        img {
-            display: block;
-            max-width: 100%;
-            max-height: 400px;
-        }
-    }
 
     .section-title {
         display: block;
@@ -127,6 +114,33 @@
 
             span.font-4 {
                 margin: 1rem 0;
+            }
+        }
+    }
+
+    .box {
+        .page-content {
+            .content {
+                .div40 {
+                    min-width: 10px;
+                    width: 90%;
+                    margin: 0 auto;
+                    display: block;
+                }
+
+                .div60 {
+                    display: none;
+                }
+            }
+        }
+    }
+
+    .box2 {
+        .page-content {
+            .content-sec {
+                .font-2 {
+                    line-height: 2rem;
+                }
             }
         }
     }

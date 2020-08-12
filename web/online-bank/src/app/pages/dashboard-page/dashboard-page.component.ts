@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, AfterViewInit, OnDestroy } from '@angular
 import { state, style, transition, animate, trigger } from '@angular/animations';
 import { RouterOutlet, Router } from '@angular/router';
 import { fader, slider } from '../../animations/animations';
+import { MatSidenav } from '@angular/material/sidenav';
 
 @Component({
   selector: 'app-dashboard-page',
@@ -9,7 +10,9 @@ import { fader, slider } from '../../animations/animations';
   styleUrls: ['./dashboard-page.component.scss'],
   animations: [slider]
 })
-export class DashboardPageComponent implements OnInit {
+export class DashboardPageComponent implements OnInit, AfterViewInit {
+
+	@ViewChild('sidenav') sidenav: MatSidenav;
 
 	isMobile = false;
 
@@ -17,6 +20,10 @@ export class DashboardPageComponent implements OnInit {
 
 	ngOnInit(): void {
 		this.isMobile = document.body.offsetWidth <= 800;
+	}
+
+	ngAfterViewInit(): void {
+		if(!this.isMobile) this.sidenav.open();
 	}
 
 	prepareRoute(outlet: RouterOutlet) {
