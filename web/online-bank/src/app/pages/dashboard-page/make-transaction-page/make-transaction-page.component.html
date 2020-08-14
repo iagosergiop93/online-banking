@@ -16,7 +16,7 @@
 
         <mat-form-field *ngIf="transactionType === 3" appearance="legacy">
             <mat-label>Account to transfer from</mat-label>
-            <mat-select formControlName="account">
+            <mat-select formControlName="fromAcc">
                 <mat-option *ngFor="let item of accountsArray" value="{{item.accountNumber}}">
                     {{ accDict[item.type] }} - {{ item.accountNumber }}
                 </mat-option>

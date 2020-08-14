@@ -31,7 +31,12 @@ export class DashboardPageComponent implements OnInit, AfterViewInit {
 	}
 
 	goTo(path: string) {
+		this.optionSelected();
 		this.router.navigate([path]);
+	}
+
+	optionSelected() {
+		if(this.isMobile) this.sidenav.close();
 	}
 
 }
