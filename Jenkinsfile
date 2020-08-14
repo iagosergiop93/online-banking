@@ -5,7 +5,16 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building ...'
-                sh 'ls'
+                dir('web/online-bank') {
+                    echo 'Listing directory after build'
+                    sh 'ls'
+                    nodejs('nodejs-bank-angular') {
+                        sh 'npm install'
+                        sh 'ng build --prod'
+                    }
+                    echo 'Listing directory after build'
+                    sh 'ls'
+                }
             }
         }
         stage('Test') {
