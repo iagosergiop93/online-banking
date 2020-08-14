@@ -29,6 +29,9 @@ export async function getUserByEmail(conn: PoolConnection, email: string): Promi
         user = mapResultSetToUsers(results).shift();
     } catch(e) {
         console.error(e);
+        if(!!e.status && e.status == 400) {
+            return Promise.reject(e);
+        }
         return Promise.reject(new ServerError("An unexpected error happened."));
     }
 

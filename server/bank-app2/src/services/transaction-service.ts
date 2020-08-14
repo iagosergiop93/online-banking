@@ -60,7 +60,7 @@ export class TransactionService {
     }
 
     async transfer(transaction: Transaction, principal: Principal): Promise<boolean> {
-        this.logger.debug("In transactionService simpleTransaction(" + transaction + ", " +  principal + ")");
+        this.logger.debug("In transactionService transfer(" + transaction + ", " +  principal + ")");
         let conn: PoolConnection;
         try {
             conn = await startTransaction();
