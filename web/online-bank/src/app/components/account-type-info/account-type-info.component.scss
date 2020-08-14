@@ -10,3 +10,10 @@
     padding: 2rem;
     align-self: center;
 }
+
+@media(max-width: 800px) {
+    .account-desc {
+        min-width: 100px !important;
+        width: 90% !important;
+    }
+}

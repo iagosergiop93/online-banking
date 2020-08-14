@@ -52,7 +52,7 @@ export function transactionController() {
         try {
             if(req.body.type != TransactionType.TRANSFER || req.body.fromAcc == req.body.toAcc) throw new BadRequest("Invalid Request");
             let principal: Principal = JSON.parse(res.locals.authorization.data);
-            let transaction: Transaction = new Transaction(req.body.fromAcc,req.body.toAcc, req.body.type, req.body.value);
+            let transaction: Transaction = new Transaction(req.body.fromAcc,req.body.toAcc, req.body.type, parseFloat(req.body.value));
             
             let worked = await transactionService.transfer(transaction, principal);
             if(!worked) throw new ServerError("Something bad happened");

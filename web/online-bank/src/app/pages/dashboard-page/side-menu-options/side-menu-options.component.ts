@@ -26,10 +26,10 @@ export class SideMenuOptionsComponent implements OnInit {
 		if(option.name === 'Sign out') {
 			this.userService.logout();
 		}
-		else if(option.name === 'not-impl') {
+		else if(option.path === 'not-impl') {
 			this.dialog.showFeedBackDialog('This feature hasn\'t been implemented yet');
 		}
-		if (!!option.path) {
+		else if (!!option.path) {
 			this.router.navigate([option.path]);
 		}
 	}

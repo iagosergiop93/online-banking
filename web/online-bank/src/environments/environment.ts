@@ -6,7 +6,7 @@ export const environment = {
   production: false,
 };
 
-export const API_URL = "http://localhost:4201";
+export const API_URL = "http://localhost:4201/api";
 export const TOKEN = {
   name: "b-token",
   scheme: "Bearer",

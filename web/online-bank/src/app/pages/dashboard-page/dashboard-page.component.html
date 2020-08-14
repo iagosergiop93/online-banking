@@ -3,7 +3,7 @@
 <mat-sidenav-container>
     <mat-sidenav #sidenav [mode]="isMobile ? 'over' : 'side'">
         <app-side-menu-profile></app-side-menu-profile>
-        <app-side-menu-options (optionSelected)="sidenav.close()"></app-side-menu-options>
+        <app-side-menu-options (optionSelected)="optionSelected()"></app-side-menu-options>
 
         <button mat-raised-button color="primary" class="new-account" (click)="goTo('dashboard/create-account')" >Create a new Account</button>
 

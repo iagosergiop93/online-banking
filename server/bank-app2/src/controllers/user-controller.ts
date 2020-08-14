@@ -66,7 +66,7 @@ export function userController(): Router {
     });
 
     router.post("/login", async (req: Request, res: Response) => {
-        req.log.info('In userController /register handler');
+        req.log.info('In userController /login handler');
         try {
             // validate credentials
             validateCredentials(req);
