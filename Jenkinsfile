@@ -5,15 +5,18 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building ...'
+                echo 'Building Angular App'
                 dir('web/online-bank') {
-                    echo 'Listing directory after build'
-                    sh 'ls'
                     nodejs('nodejs-bank-angular') {
                         sh 'npm install'
                         sh 'ng build --prod'
                     }
-                    echo 'Listing directory after build'
-                    sh 'ls'
+                }
+                dir('server/bank-app2') {
+                    nodejs('nodejs-bank-angular') {
+                        sh 'npm install'
+                        sh 'gulp transpile'
+                    }
                 }
             }
         }
@@ -25,6 +28,10 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Deploying ...'
+                dir('web/online-bank') {
+                    echo 'Deploying Angular app to S3 bucket'
+                    s3Upload consoleLogLevel: 'INFO', dontSetBuildResultOnFailure: false, dontWaitForConcurrentBuildCompletion: false, entries: [[bucket: 'online-bank-angular-app', excludedFile: '', flatten: false, gzipFiles: false, keepForever: false, managedArtifacts: false, noUploadOnFailure: true, selectedRegion: 'us-east-1', showDirectlyInBrowser: false, sourceFile: 'dist/online-bank/*', storageClass: 'STANDARD', uploadFromSlave: false, useServerSideEncryption: true]], pluginFailureResultConstraint: 'FAILURE', profileName: 'iago_bank', userMetadata: []
+                }
             }
         }
     }
