@@ -12,12 +12,6 @@ pipeline {
                         sh 'ng build --prod'
                     }
                 }
-                dir('server/bank-app2') {
-                    nodejs('nodejs-bank-angular') {
-                        sh 'npm install'
-                        sh 'gulp transpile'
-                    }
-                }
             }
         }
         stage('Test') {
