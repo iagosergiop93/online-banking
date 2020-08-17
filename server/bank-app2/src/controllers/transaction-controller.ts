@@ -21,8 +21,9 @@ export function transactionController() {
             if(!res.locals.authorization) throw new BadRequest("User is not authenticated");
             let principal: Principal = JSON.parse(res.locals.authorization.data);
             let accNumber = req.params["accNumber"];
-            let match = await accountService.matchAccountByUserId(accNumber, principal.id);
-            if(!match) throw new BadRequest("Unauthorized User");
+            
+            await accountService.matchAccountByUserId(accNumber, principal.id);
+            
             let transactions = await transactionService.getTransactionsByAccountNumber(accNumber);
             res.status(200).send(transactions);
         } catch(e) {

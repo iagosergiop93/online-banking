@@ -116,3 +116,4 @@ resources/
 *.sql
 pictures/
 deploy/
+coverage/

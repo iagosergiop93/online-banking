@@ -1,4 +1,5 @@
 import config from "../resources/db-conn.json";
+import configLocal from "../resources/db-conn-local.json";
 import mysql, { Pool } from "mysql";
 
 var SINGLE_POOL: Pool;
@@ -19,7 +20,8 @@ function poolExists() {
 }
 
 function getPoolConfig(numOfConn?: number): any {
-    let conf = Object.create(config);
+    console.log('local',process.env.LOCAL);
+    let conf = !!process.env.LOCAL && process.env.LOCAL == 'true' ? Object.create(configLocal) : Object.create(config);
     if(!!numOfConn && numOfConn > 0 && numOfConn < 1000) {
         conf.connectionLimit = numOfConn;
     }

@@ -5,6 +5,7 @@ import { startTransaction, commitQuery, getPoolConnection, releaseConnection } f
 import { Connection, PoolConnection } from "mysql";
 import { Logger } from "pino";
 import { getPinoLogger } from "../utils/logger";
+import { BadRequest } from "../exceptions/bad-request";
 
 export class AccountService {
 
@@ -58,6 +59,7 @@ export class AccountService {
             accounts.forEach(acc => {
                 if(acc.accountNumber === accNumber) match = true;
             });
+            if(!accounts || accounts.length === 0) throw new BadRequest("Unauthorized User");
         } catch(e) {
             throw e;
         }
