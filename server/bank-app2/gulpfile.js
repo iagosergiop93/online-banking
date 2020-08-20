@@ -3,7 +3,18 @@ const ts = require('gulp-typescript');
 
 const tsProject = ts.createProject('tsconfig.json');
 
-gulp.task('transpile', () => {
-    const tsResult = gulp.src('src/**/*.ts').pipe(tsProject());
+const transpile = () => {
+    const tsResult = gulp.src('src/**/[jt]*').pipe(tsProject());
     return tsResult.pipe(gulp.dest('build'));
-});
+}
+gulp.task('transpile', transpile);
+
+
+const moveResources = () => {
+    return gulp.src('src/resources/*')
+            .pipe(gulp.dest('build/resources'));
+}
+gulp.task('moveResources', moveResources);
+
+
+exports.default = gulp.series(transpile, moveResources);

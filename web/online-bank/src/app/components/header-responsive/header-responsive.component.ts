@@ -35,7 +35,7 @@ export class HeaderResponsiveComponent implements OnInit {
 		if(item.name === 'Sign out') {
 			this.userService.logout();
 		}
-		else if(item.name === 'not-impl') {
+		else if(item.path === 'not-impl') {
 			this.dialog.showFeedBackDialog('This feature hasn\'t been implemented yet');
 		}
 		else if(!!item.path){
