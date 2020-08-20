@@ -12,14 +12,14 @@ export class DialogService {
 
 	showFeedBackDialog(msg: string) {
 		this.dialog.open(UserFeedbackComponent, {
-			width: '300px',
+			width: '350px',
 			data: {text: msg}
 		});
 	}
 
 	confirmDialog(msg: string) {
 		this.dialog.open(UserFeedbackComponent, {
-			width: '300px',
+			width: '350px',
 			data: {text: msg}
 		});
 	}

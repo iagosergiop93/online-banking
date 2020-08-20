@@ -41,7 +41,7 @@ export class HomePageComponent implements OnInit, AfterViewInit, OnDestroy {
 					this.getTransactions(acc.accountNumber, acc.type);
 				});
 
-				this.summary.createAccountsDoughnutChart();
+				this.summary.createCharts();
 			},
 			(err) => {
 				this.dialogService.showFeedBackDialog(err.description);

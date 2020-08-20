@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Account, ACCOUNT_DICT } from 'src/app/entities/account';
-import { createDoughnutChart } from 'src/app/utils/charts';
+import { createDoughnutChart, createBarChart } from 'src/app/utils/charts';
 import { Chart } from 'node_modules/chart.js/dist/Chart';
 
 @Component({
@@ -15,6 +15,7 @@ export class SummaryComponent implements OnInit {
 
 	doughnutChart: Chart;
 	lineChart: Chart;
+	barChart: Chart;
 
 	showSummary = true;
 
@@ -23,22 +24,27 @@ export class SummaryComponent implements OnInit {
 	ngOnInit(): void {
 	}
 
-	createAccountsDoughnutChart() {
-		let doughnutData = this.accounts.map(item => {
+	createCharts() {
+		const LabelsAndData = this.prepareChartData();
+		createDoughnutChart.apply(this, [...LabelsAndData, 'doughnutChart']);
+		createBarChart.apply(this, [...LabelsAndData, 'barChart']);
+	}
+
+	private prepareChartData() {
+		let chartData = this.accounts.map(item => {
 			if(item.balance === 0) return;
 			return item.balance;
 		});
-		if(doughnutData.length > 0 && !!doughnutData[0]) {
-			let doughnutLabels = this.accounts.map(item => ACCOUNT_DICT[item.type]);
-			this.doughnutChart = createDoughnutChart(doughnutLabels, doughnutData, 'doughnutChart');
+		
+		let chartLabels = [];
+		if(chartData.length > 0 && !!chartData[0]) {
+			chartLabels = this.accounts.map(item => ACCOUNT_DICT[item.type]);
 		}
 		else {
 			this.showSummary = false;
 		}
-	}
 
-	createLineChart() {
-
+		return [chartLabels, chartData];
 	}
 
 }
