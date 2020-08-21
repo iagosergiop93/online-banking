@@ -29,6 +29,7 @@ export function validateCredentials(req: Request) {
 
 export function validateTransaction(req: Request) {
     if(!req.body.fromAcc || !req.body.toAcc || !req.body.type || !req.body.value) throw new BadRequest("Missing field");
+    if(req.body.value < 0) throw new BadRequest("Invalid field");
 }
 
 export function checkForToken(req: Request, res: Response, next: NextFunction) {

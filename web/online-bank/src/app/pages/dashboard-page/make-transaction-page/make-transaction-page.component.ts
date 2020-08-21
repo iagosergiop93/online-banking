@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormGroup } from '@angular/forms';
-import { createSimpleTransactionFormGroup, createTransferTransactionFormGroup } from '../../../utils/createFormGroups';
+import { createSimpleTransactionFormGroup, createTransferTransactionFormGroup, formHasErrors } from '../../../utils/createFormGroups';
 import { BalanceComponent } from '../balance/balance.component';
 import { AccountsService } from 'src/app/services/accounts.service';
 import { Account, ACCOUNT_DICT } from 'src/app/entities/account';
@@ -61,6 +61,9 @@ export class MakeTransactionPageComponent implements OnInit {
 	}
 
 	submitForm() {
+
+		if(formHasErrors(this.transactionForm.controls, this.transactionType)) return;
+
 		const result = Object.assign({}, this.transactionForm.value);
 		let transaction;
 		if(this.transactionType === TransactionType.DEPOSIT || this.transactionType === TransactionType.WITHDRAW) {

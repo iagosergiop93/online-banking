@@ -1,4 +1,5 @@
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { TransactionType } from '../entities/transaction';
 
 export function createSignInFormGroup(): FormGroup {
     return new FormGroup({
@@ -57,4 +58,15 @@ export function createTransferTransactionFormGroup() {
             Validators.min(0.1)
         ])
     });
+}
+
+export function formHasErrors(formControls, formType: TransactionType) {
+    if(formType === TransactionType.DEPOSIT || formType === TransactionType.WITHDRAW) {
+        if(formControls.account.errors || formControls.value.errors) return true;
+    }
+    else if(formType === TransactionType.TRANSFER) {
+        if(formControls.fromAcc.errors || formControls.toAcc.errors || formControls.value.errors) return true;
+    }
+
+    return false;
 }
