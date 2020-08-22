@@ -4,7 +4,7 @@ const ts = require('gulp-typescript');
 const tsProject = ts.createProject('tsconfig.json');
 
 const transpile = () => {
-    const tsResult = gulp.src('src/**/[jt]*').pipe(tsProject());
+    const tsResult = gulp.src('src/**/*').pipe(tsProject());
     return tsResult.pipe(gulp.dest('build'));
 }
 gulp.task('transpile', transpile);
