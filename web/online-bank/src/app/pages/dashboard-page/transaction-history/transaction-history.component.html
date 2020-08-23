@@ -1,7 +1,7 @@
 <span class="section-title font-3">Transactions History</span>
 <div class="transaction-box">
     <mat-tab-group mat-align-tabs="start">
-        <mat-tab *ngFor="let item of AccountDictTransactionArray | keyvalue" label="{{ accDict[item.key] }}" class="font-4">
+        <mat-tab *ngFor="let item of accountsTransactions | keyvalue" label="{{ '#' + item.key }}" class="font-4">
             <table mat-table [dataSource]="item.value">
                 <ng-container matColumnDef="date">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-4 date-width"> Date </th>

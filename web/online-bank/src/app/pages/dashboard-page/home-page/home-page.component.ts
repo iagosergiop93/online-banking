@@ -52,8 +52,7 @@ export class HomePageComponent implements OnInit, AfterViewInit, OnDestroy {
 	private getTransactions(accountNumber: string, accountType: AccountType) {
 		this.transactionsService.getTransactions(accountNumber).subscribe(
 			(transactions: Transaction[]) => {
-				this.transactionHistory.AccountDictTransactionArray[accountType] = transactions;
-				this.summary.AccountDictTransactionArray[accountType] = transactions;
+				this.transactionHistory.accountsTransactions[accountNumber] = transactions;
 			},
 			(err) => {
 				this.dialogService.showFeedBackDialog(err.description);
