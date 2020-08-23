@@ -1,19 +1,17 @@
 @import "../../../../styles.scss";
 
 .flex-balance {
-    width: 80%;
-    margin: 0 auto;
     display: flex;
     justify-content: start;
     padding: 1rem;
+    overflow-x: auto;
 }
 
 .account {
     border-radius: 12px;
     border: 3px solid $grey;
-    padding: 1rem;
+    padding: 1rem 1.5rem;
     margin: 2rem;
-    width: 7rem;
     line-height: 1.5;
 
     .value {
@@ -22,23 +20,18 @@
         text-align: center;
     }
 
-    .acc-type {
+    .acc-type, .acc-number {
         display: block;
         text-align: center;
+    }
+
+    .acc-number {
+        color: #a5a5a5;
+        font-weight: bold;
     }
 
 }
 
 .account * {
     cursor: default;
-}
-
-@media(max-width: 800px) {
-    .flex-balance {
-        width: 100%;
-    }
-
-    .account {
-        margin: 0.5rem;
-    }
 }

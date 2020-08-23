@@ -9,12 +9,11 @@ import { Account, ACCOUNT_DICT } from 'src/app/entities/account';
 })
 export class TransactionHistoryComponent implements OnInit {
 
-	accDict = ACCOUNT_DICT;
 	trDict = TRANSACTION_DICT;
 
 	columnsToDisplay = ['date', 'time', 'description' ,'value'];
 
-	AccountDictTransactionArray: any = {};
+	accountsTransactions: any = {}
 
 	constructor() { }
 

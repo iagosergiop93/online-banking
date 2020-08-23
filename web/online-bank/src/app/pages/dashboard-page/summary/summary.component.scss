@@ -1,6 +1,8 @@
 .summary-container {
     display: flex;
-
+    overflow-x: auto;
+    padding: 0 1rem;
+    
     .chart {
         margin: 1rem 2rem;
     }

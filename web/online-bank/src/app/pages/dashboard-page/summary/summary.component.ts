@@ -11,7 +11,6 @@ import { Chart } from 'node_modules/chart.js/dist/Chart';
 export class SummaryComponent implements OnInit {
 
 	accounts: Account[];
-	AccountDictTransactionArray: any = {};
 
 	doughnutChart: Chart;
 	lineChart: Chart;
