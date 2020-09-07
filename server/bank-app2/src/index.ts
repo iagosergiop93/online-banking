@@ -27,7 +27,7 @@ app.listen(PORT, () => {
 });
 
 // Jobs
-cron.schedule('0 23 18 7 * *', () => {
+cron.schedule('0 0 18 * * *', () => {
 	console.log("Running Savings job at ", new Date().toString());
 	savingsAccountUpdate();
 });

@@ -1,4 +1,4 @@
-import { Account } from "../entities/Account";
+import { Account, AccountType } from "../entities/Account";
 import { Connection } from "mysql";
 import { ServerError } from "../exceptions/server-error";
 import { BadRequest } from "../exceptions/bad-request";
@@ -8,6 +8,22 @@ export async function getAllAccounts(conn: Connection): Promise<Account[]> {
     let accounts: Account[];
     try {
         let sql = "SELECT * FROM accounts";
+        let resultsAndFields: any[] = await executeQueryInsideTransaction(conn, sql,[]);
+        let accs = resultsAndFields.shift();
+        if(accs.length == 0) throw new ServerError("Accounts not found");
+        accounts = mapResultSetToAccounts(accs);
+    } catch (error) {
+        console.log(error);
+        return Promise.reject(new ServerError("An unexpected error happened"));
+    }
+
+    return accounts;
+}
+
+export async function getAllSavingsAccounts(conn: Connection): Promise<Account[]> {
+    let accounts: Account[];
+    try {
+        let sql = "SELECT * FROM accounts WHERE type = " + AccountType.SAVINGS;
         let resultsAndFields: any[] = await executeQueryInsideTransaction(conn, sql,[]);
         let accs = resultsAndFields.shift();
         if(accs.length == 0) throw new ServerError("Accounts not found");
