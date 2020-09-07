@@ -1,5 +1,6 @@
 const { Account, AccountType } = require('../../entities/Account');
 const AccountService = require('../account-service').AccountService;
+const { User } = require('../../entities/User');
 
 // Mock logger
 const logger = {
@@ -66,5 +67,3 @@ describe('matchAccountByUserId', () => {
 });
 
 // End - Method: matchAccountByUserId -------------------------------------------------
-
-

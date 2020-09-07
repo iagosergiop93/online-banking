@@ -4,6 +4,22 @@ import { ServerError } from "../exceptions/server-error";
 import { BadRequest } from "../exceptions/bad-request";
 import { executeQueryInsideTransaction } from "./queryMaker";
 
+export async function getAllAccounts(conn: Connection): Promise<Account[]> {
+    let accounts: Account[];
+    try {
+        let sql = "SELECT * FROM accounts";
+        let resultsAndFields: any[] = await executeQueryInsideTransaction(conn, sql,[]);
+        let accs = resultsAndFields.shift();
+        if(accs.length == 0) throw new ServerError("Accounts not found");
+        accounts = mapResultSetToAccounts(accs);
+    } catch (error) {
+        console.log(error);
+        return Promise.reject(new ServerError("An unexpected error happened"));
+    }
+
+    return accounts;
+}
+
 export async function getAccountByAccountNumber(conn: Connection, accNumber: string): Promise<Account> {
     let account: Account;
     try {
@@ -79,10 +95,10 @@ export async function linkUserToAccount(conn: Connection, userId: number, accNum
 
 function mapResultSetToAccounts(results: any[]) {
     let accounts = results.map(item => {
-        if(item.id == undefined || item.balance == undefined || item.type == undefined) {
-            throw new ServerError("Invalid account found in Database");
-        }
-        return new Account(item.id, item.accountNumber, parseFloat(item.balance), item.type, item._createdAt, item._updatedAt);
+        // if(item.id == undefined || item.balance == undefined || item.type == undefined) {
+        //     throw new ServerError("Invalid account found in Database");
+        // }
+        return new Account(item.id, item.accountNumber, parseFloat(item.balance), item.type, parseFloat(item.interest), item._createdAt, item._updatedAt);
     });
     return accounts;
 }

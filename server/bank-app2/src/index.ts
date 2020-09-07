@@ -4,9 +4,11 @@ import helmet from "helmet";
 import cors from "cors";
 import corsConfig from "./resources/cors-config.json";
 import pinoHttp from "pino-http";
+import cron from "node-cron";
 
 import { AppRouter } from "./routing";
 import { getPinoLogger } from "./utils/logger";
+import { savingsAccountUpdate } from "./batch-jobs/savings-account-job";
 
 const logger = pinoHttp(getPinoLogger());
 
@@ -22,4 +24,10 @@ AppRouter(app);
 
 app.listen(PORT, () => {
 	console.log("App listening on port " + PORT);
+});
+
+// Jobs
+cron.schedule('0 23 18 7 * *', () => {
+	console.log("Running Savings job at ", new Date().toString());
+	savingsAccountUpdate();
 });
