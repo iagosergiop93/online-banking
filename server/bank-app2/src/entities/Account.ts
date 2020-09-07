@@ -8,15 +8,17 @@ export class Account {
 	accountNumber: string;
 	balance: number;
 	type: AccountType;
+	interest: number;
 	_createdAt: string;
 	_updatedAt: string;
 	_deletedAt: string;
 
-	constructor(id: number,accountNumber: string, balance: number, type: AccountType, _createdAt?: string, _updatedAt?: string) {
+	constructor(id: number,accountNumber: string, balance: number, type: AccountType, interest?: number, _createdAt?: string, _updatedAt?: string) {
 		this.id = id;
 		this.accountNumber = accountNumber;
 		this.balance = balance;
 		this.type = type;
+		this.interest = interest;
 		this._createdAt = _createdAt;
 		this._updatedAt = _updatedAt;
 	}
