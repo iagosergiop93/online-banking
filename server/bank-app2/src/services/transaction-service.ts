@@ -48,9 +48,7 @@ export class TransactionService {
             commitQuery(conn);
 
         } catch(e) {
-            if(!!conn) {
-                conn.rollback();
-            }
+            if(!!conn) conn.rollback();
             throw e;
         } finally {
             if(!!conn) releaseConnection(conn);;
@@ -72,9 +70,7 @@ export class TransactionService {
             await insertTransaction(conn, transaction);
             commitQuery(conn);
         } catch(e) {
-            if(!!conn) {
-                conn.rollback();
-            }
+            if(!!conn) conn.rollback();
             throw e;
         } finally {
             if(!!conn) releaseConnection(conn);
@@ -104,6 +100,7 @@ export class TransactionService {
                 account.balance = account.balance + transaction.value;
                 break;
             case TransactionType.WITHDRAW:
+                if(account.balance < transaction.value) throw new BadRequest("There is not enough funds for this transaction.");
                 account.balance -= transaction.value;
                 break;
             default:
@@ -115,6 +112,7 @@ export class TransactionService {
 
     private processTransferTransaction(transaction: Transaction, fromAcc: Account, toAcc: Account) {
         const value = transaction.value;
+        if(fromAcc.balance < value) throw new BadRequest("There is not enough funds to process this transaction.");
         fromAcc.balance -= value;
         toAcc.balance += value;
     }
