@@ -6,6 +6,7 @@ import { Connection, PoolConnection } from "mysql";
 import { Logger } from "pino";
 import { getPinoLogger } from "../utils/logger";
 import { BadRequest } from "../exceptions/bad-request";
+import { round } from "../utils/mathUtils";
 
 export class AccountService {
 
@@ -44,6 +45,9 @@ export class AccountService {
         try {
             conn = await getPoolConnection();
             accounts = await getAccountsByUserId(conn, id);
+            accounts.forEach(acc => {
+                acc.balance = round(acc.balance, 2);
+            });
         } catch(e) {
             throw e;
         } finally {
