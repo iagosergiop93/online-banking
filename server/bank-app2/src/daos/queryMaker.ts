@@ -55,5 +55,5 @@ export function commitQuery(conn: Connection) {
 }
 
 export function releaseConnection(conn: PoolConnection) {
-    getPool().releaseConnection(conn);
+    conn.release();
 }
